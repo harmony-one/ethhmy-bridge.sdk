@@ -19,9 +19,21 @@ export const operation = async (params: {
   token: TOKEN;
   type: EXCHANGE_MODE;
   amount: number;
+  oneAddress: string;
+  ethAddress: string;
   erc20Address?: string;
 }) => {
-  const { api, web3Client, hmyClient, token, type, amount, erc20Address } = params;
+  const {
+    api,
+    oneAddress,
+    ethAddress,
+    web3Client,
+    hmyClient,
+    token,
+    type,
+    amount,
+    erc20Address,
+  } = params;
 
   const prefix = `[${token.toUpperCase()}: ${type.toUpperCase()}]`;
 
@@ -32,8 +44,8 @@ export const operation = async (params: {
     const oneBalanceBefore = await getOneBalance(hmyClient, web3Client, token, erc20Address);
 
     const operationParams = {
-      oneAddress: hmyClient.userAddress,
-      ethAddress: web3Client.userAddress,
+      oneAddress,
+      ethAddress,
       amount,
       type,
       token,

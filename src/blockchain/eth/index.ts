@@ -13,11 +13,10 @@ export interface IWeb3Client {
   ethMethodsLINK: EthMethods;
   ethMethodsERC20: EthMethodsERC20;
   userAddress: string;
+  addWallet: (pk: string) => void;
 }
 
 export interface IWeb3ClientParams {
-  privateKey?: string;
-  useWallet: boolean;
   nodeURL: string;
   contracts: {
     busd: string;
@@ -34,9 +33,10 @@ export interface IWeb3ClientParams {
 export const getWeb3Client = (params: IWeb3ClientParams): IWeb3Client => {
   const web3 = new Web3(params.nodeURL);
 
-  const ethUserAccount = params.privateKey
-    ? web3.eth.accounts.privateKeyToAccount(params.privateKey)
-    : web3.eth.accounts.create();
+  // const ethUserAccount = params.privateKey
+  //   ? web3.eth.accounts.privateKeyToAccount(params.privateKey)
+  //   : web3.eth.accounts.create();
+  const ethUserAccount = web3.eth.accounts.create();
 
   web3.eth.accounts.wallet.add(ethUserAccount);
   web3.eth.defaultAccount = ethUserAccount.address;
@@ -99,6 +99,11 @@ export const getWeb3Client = (params: IWeb3ClientParams): IWeb3Client => {
   };
 
   return {
+    addWallet: async (privateKey: string) => {
+      await web3.eth.accounts.privateKeyToAccount(privateKey);
+      web3.eth.accounts.wallet.add(ethUserAccount);
+      web3.eth.defaultAccount = ethUserAccount.address;
+    },
     web3,
     getEthBalance,
     ethMethodsBUSD,

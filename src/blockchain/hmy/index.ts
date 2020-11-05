@@ -15,11 +15,10 @@ export interface IHmyClient {
   userAddress: string;
   getHmyBalance: (addr: string) => Promise<string>;
   getBech32Address: (addr: string) => string;
+  addWallet: (pk: string) => void;
 }
 
 export interface IHmyClientParams {
-  privateKey?: string;
-  useWallet: boolean;
   nodeURL: string;
   chainId: number;
   contracts: {
@@ -45,9 +44,11 @@ export const getHmyClient = async (params: IHmyClientParams): Promise<IHmyClient
 
   const { contracts } = params;
 
-  const hmyUserAccount = params.privateKey
-    ? hmy.wallet.addByPrivateKey(params.privateKey)
-    : await hmy.wallet.createAccount();
+  // const hmyUserAccount = params.privateKey
+  //   ? hmy.wallet.addByPrivateKey(params.privateKey)
+  //   : await hmy.wallet.createAccount();
+
+  const hmyUserAccount = await hmy.wallet.createAccount();
 
   const hmyBUSDContract = hmy.contracts.createContract(hmyLINKAbi, contracts.busd);
 
@@ -86,6 +87,9 @@ export const getHmyClient = async (params: IHmyClientParams): Promise<IHmyClient
   });
 
   return {
+    addWallet: async (privateKey: string) => {
+      await hmy.wallet.addByPrivateKey(privateKey);
+    },
     hmy,
     hmyMethodsBUSD,
     hmyMethodsLINK,

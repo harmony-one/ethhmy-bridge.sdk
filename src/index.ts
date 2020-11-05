@@ -10,10 +10,8 @@ import confgis from './configs';
 
 interface IBridgeSDKParams {
   api: IAPIParams;
-  ethPK: string;
-  hmyPK: string;
-  useWallet: boolean;
-  network: 'mainnet' | 'testnet';
+  ethClient: typeof confgis.eth.mainnet;
+  hmyClient: typeof confgis.hmy.mainnet;
 }
 
 export class BridgeSDK {
@@ -25,24 +23,24 @@ export class BridgeSDK {
 
   init = async (params: IBridgeSDKParams) => {
     this.api = new ValidatorsAPI(params.api);
+    this.web3Client = getWeb3Client(params.ethClient);
+    this.hmyClient = await getHmyClient(params.hmyClient);
+  };
 
-    this.web3Client = getWeb3Client({
-      ...confgis.eth[params.network],
-      privateKey: params.ethPK,
-      useWallet: params.useWallet,
-    });
+  addOneWallet = async (privateKey: string) => {
+    await this.hmyClient.addWallet(privateKey);
+  };
 
-    this.hmyClient = await getHmyClient({
-      ...confgis.hmy[params.network],
-      privateKey: params.hmyPK,
-      useWallet: params.useWallet,
-    });
+  addEthWallet = async (privateKey: string) => {
+    await this.web3Client.addWallet(privateKey);
   };
 
   sendToken = async (params: {
     type: EXCHANGE_MODE;
     token: TOKEN;
     amount: number;
+    oneAddress: string;
+    ethAddress: string;
     erc20Address?: string;
   }) => {
     return await operation({
