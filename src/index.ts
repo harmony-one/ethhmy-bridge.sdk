@@ -42,12 +42,12 @@ export class BridgeSDK {
     oneAddress: string;
     ethAddress: string;
     erc20Address?: string;
-  }) => {
+  }, callback?: (id: string) => void) => {
     return await operation({
       ...params,
       api: this.api,
       web3Client: this.web3Client,
       hmyClient: this.hmyClient,
-    });
+    }, callback);
   };
 }

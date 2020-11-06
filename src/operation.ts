@@ -11,17 +11,20 @@ import { ValidatorsAPI } from './api';
 import { HmyMethods } from './blockchain/hmy/HmyMethods';
 import { EthMethods } from './blockchain/eth/EthMethods';
 
-export const operation = async (params: {
-  api: ValidatorsAPI;
-  web3Client: IWeb3Client;
-  hmyClient: IHmyClient;
-  token: TOKEN;
-  type: EXCHANGE_MODE;
-  amount: number;
-  oneAddress: string;
-  ethAddress: string;
-  erc20Address?: string;
-}) => {
+export const operation = async (
+  params: {
+    api: ValidatorsAPI;
+    web3Client: IWeb3Client;
+    hmyClient: IHmyClient;
+    token: TOKEN;
+    type: EXCHANGE_MODE;
+    amount: number;
+    oneAddress: string;
+    ethAddress: string;
+    erc20Address?: string;
+  },
+  callback?: (id: string) => void
+) => {
   const {
     api,
     oneAddress,
@@ -64,6 +67,10 @@ export const operation = async (params: {
 
     let operation: IOperation;
     operation = await api.createOperation(operationParams);
+
+    if (operation && callback) {
+      callback(operation.id);
+    }
 
     logOperationParams(operation, prefix);
 
