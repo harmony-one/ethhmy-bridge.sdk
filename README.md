@@ -83,6 +83,7 @@ await bridgeSDK.sendToken({
   ethAddress: '0x12344Ab6773925122E389fE2684A9A938043f475',
 }, (id) => oprationId = id);
 ```
+#### You don't need to do anything more. All other actions will be done automaticly. If you work in browser mode - sign transactions action also will be called automaticly. You need only to fetch and display operation status (step 4)
 
 ### 4. Get operation details
 
