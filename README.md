@@ -93,7 +93,7 @@ const operation = await bridgeSDK.api.getOperation(operationId);
 ### Full Eth -> One example
 
 ```
-const { BridgeSDK, TOKEN, EXCHANGE_MODE, STATUS } = require('..');
+const { BridgeSDK, TOKEN, EXCHANGE_MODE, STATUS } = require('bridge-sdk');
 const { ethClient, hmyClient, apiConfig } = require('./configs');
 
 const operationCall = async () => {
