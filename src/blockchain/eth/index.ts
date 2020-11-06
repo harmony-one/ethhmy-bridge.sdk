@@ -12,7 +12,7 @@ export interface IWeb3Client {
   ethMethodsBUSD: EthMethods;
   ethMethodsLINK: EthMethods;
   ethMethodsERC20: EthMethodsERC20;
-  userAddress: string;
+  getUserAddress: () => string;
   addWallet: (pk: string) => void;
 }
 
@@ -33,13 +33,14 @@ export interface IWeb3ClientParams {
 export const getWeb3Client = (params: IWeb3ClientParams): IWeb3Client => {
   const web3 = new Web3(params.nodeURL);
 
+  let ethUserAccount: any;
   // const ethUserAccount = params.privateKey
   //   ? web3.eth.accounts.privateKeyToAccount(params.privateKey)
   //   : web3.eth.accounts.create();
-  const ethUserAccount = web3.eth.accounts.create();
-
-  web3.eth.accounts.wallet.add(ethUserAccount);
-  web3.eth.defaultAccount = ethUserAccount.address;
+  // let ethUserAccount = web3.eth.accounts.create();
+  //
+  // web3.eth.accounts.wallet.add(ethUserAccount);
+  // web3.eth.defaultAccount = ethUserAccount.address;
 
   const { contracts, gasPrice = 100000000000, gasLimit = 150000, gasApiKey = '' } = params;
 
@@ -56,7 +57,6 @@ export const getWeb3Client = (params: IWeb3ClientParams): IWeb3Client => {
     ethTokenContract: ethBUSDContract,
     ethManagerContract: ethBUSDManagerContract,
     ethManagerAddress: contracts.busdManager,
-    userAddress: ethUserAccount.address,
     gasPrice,
     gasLimit,
     gasApiKey,
@@ -67,7 +67,6 @@ export const getWeb3Client = (params: IWeb3ClientParams): IWeb3Client => {
     ethTokenContract: ethLINKContract,
     ethManagerContract: ethLINKManagerContract,
     ethManagerAddress: contracts.linkManager,
-    userAddress: ethUserAccount.address,
     gasPrice,
     gasLimit,
     gasApiKey,
@@ -79,7 +78,6 @@ export const getWeb3Client = (params: IWeb3ClientParams): IWeb3Client => {
     web3: web3,
     ethManagerContract: ethManagerContract,
     ethManagerAddress: contracts.erc20Manager,
-    userAddress: ethUserAccount.address,
     gasPrice,
     gasLimit,
     gasApiKey,
@@ -100,7 +98,7 @@ export const getWeb3Client = (params: IWeb3ClientParams): IWeb3Client => {
 
   return {
     addWallet: async (privateKey: string) => {
-      await web3.eth.accounts.privateKeyToAccount(privateKey);
+      ethUserAccount = await web3.eth.accounts.privateKeyToAccount(privateKey);
       web3.eth.accounts.wallet.add(ethUserAccount);
       web3.eth.defaultAccount = ethUserAccount.address;
     },
@@ -109,6 +107,6 @@ export const getWeb3Client = (params: IWeb3ClientParams): IWeb3Client => {
     ethMethodsBUSD,
     ethMethodsLINK,
     ethMethodsERC20,
-    userAddress: ethUserAccount.address,
+    getUserAddress: () => ethUserAccount && ethUserAccount.address,
   };
 };

@@ -9,7 +9,6 @@ export interface IEthMethodsInitParams {
   ethManagerContract: Contract;
   ethManagerAddress: string;
   ethTokenContract: Contract;
-  userAddress: string;
   gasPrice: number;
   gasLimit: number;
   gasApiKey: string;
@@ -20,7 +19,6 @@ export class EthMethods {
   private ethManagerContract: Contract;
   private ethTokenContract: Contract;
   private ethManagerAddress: string;
-  private userAddress: string;
 
   gasPrice: number;
   gasLimit: number;
@@ -31,7 +29,6 @@ export class EthMethods {
     this.ethManagerContract = params.ethManagerContract;
     this.ethTokenContract = params.ethTokenContract;
     this.ethManagerAddress = params.ethManagerAddress;
-    this.userAddress = params.userAddress;
 
     this.gasPrice = params.gasPrice;
     this.gasLimit = params.gasLimit;
@@ -42,7 +39,7 @@ export class EthMethods {
     return await this.ethTokenContract.methods
       .approve(this.ethManagerAddress, withDecimals(amount, 18))
       .send({
-        from: this.userAddress,
+        from: this.web3.eth.defaultAccount,
         gas: this.gasLimit,
         gasPrice: new BN(await this.web3.eth.getGasPrice()).mul(new BN(1)),
       })
@@ -55,13 +52,13 @@ export class EthMethods {
     const transaction = await this.ethManagerContract.methods
       .lockToken(withDecimals(amount, 18), hmyAddrHex)
       .send({
-        from: this.userAddress,
+        from: this.web3.eth.defaultAccount,
         gas: this.gasLimit,
         gasPrice: new BN(await this.web3.eth.getGasPrice()).mul(new BN(1)),
       })
       .on('transactionHash', (hash: string) => sendTxCallback(hash));
 
-    return transaction.events.Locked;
+    return transaction;
   };
 
   checkEthBalance = async (addr: string) => {

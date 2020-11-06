@@ -12,10 +12,10 @@ export interface IHmyClient {
   hmyMethodsBUSD: HmyMethods;
   hmyMethodsLINK: HmyMethods;
   hmyMethodsERC20: HmyMethodsERC20;
-  userAddress: string;
   getHmyBalance: (addr: string) => Promise<string>;
   getBech32Address: (addr: string) => string;
   addWallet: (pk: string) => void;
+  getUserAddress: () => string;
 }
 
 export interface IHmyClientParams {
@@ -48,7 +48,8 @@ export const getHmyClient = async (params: IHmyClientParams): Promise<IHmyClient
   //   ? hmy.wallet.addByPrivateKey(params.privateKey)
   //   : await hmy.wallet.createAccount();
 
-  const hmyUserAccount = await hmy.wallet.createAccount();
+  // const hmyUserAccount = await hmy.wallet.createAccount();
+  let userAddress: string;
 
   const hmyBUSDContract = hmy.contracts.createContract(hmyLINKAbi, contracts.busd);
 
@@ -70,31 +71,29 @@ export const getHmyClient = async (params: IHmyClientParams): Promise<IHmyClient
     hmy: hmy,
     hmyTokenContract: hmyBUSDContract,
     hmyManagerContract: hmyBUSDManagerContract,
-    userAddress: hmyUserAccount.address,
   });
 
   const hmyMethodsLINK = new HmyMethods({
     hmy: hmy,
     hmyTokenContract: hmyLINKContract,
     hmyManagerContract: hmyLINKManagerContract,
-    userAddress: hmyUserAccount.address,
   });
 
   const hmyMethodsERC20 = new HmyMethodsERC20({
     hmy: hmy,
     hmyManagerContract: hmyManagerContract,
-    userAddress: hmyUserAccount.address,
   });
 
   return {
     addWallet: async (privateKey: string) => {
-      await hmy.wallet.addByPrivateKey(privateKey);
+      const account = await hmy.wallet.addByPrivateKey(privateKey);
+      userAddress = account.address;
     },
+    getUserAddress: () => userAddress,
     hmy,
     hmyMethodsBUSD,
     hmyMethodsLINK,
     hmyMethodsERC20,
-    userAddress: hmyUserAccount.address,
     getBech32Address: address => hmy.crypto.getAddress(address).bech32,
     getHmyBalance: address => hmy.blockchain.getBalance({ address }),
   };

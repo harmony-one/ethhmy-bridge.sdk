@@ -7,6 +7,7 @@ import { ethToOne } from './operations/ethToOne';
 import { oneToEth } from './operations/oneToEth';
 import { oneToEthErc20 } from './operations/oneToEthErc20';
 import { ethToOneErc20 } from './operations/ethToOneErc20';
+import { BigNumber } from 'bignumber.js';
 import { ValidatorsAPI } from './api';
 import { HmyMethods } from './blockchain/hmy/HmyMethods';
 import { EthMethods } from './blockchain/eth/EthMethods';
@@ -39,14 +40,8 @@ export const operation = async (params: {
   try {
     logger.start({ prefix, message: `test ${token.toUpperCase()}: ${type.toUpperCase()}` });
 
-    const ethBalanceBefore = await getEthBalance(web3Client, token, ethAddress, erc20Address);
-    const oneBalanceBefore = await getOneBalance(
-      hmyClient,
-      web3Client,
-      token,
-      oneAddress,
-      erc20Address
-    );
+    const ethBalanceBefore = await getEthBalance(web3Client, token, erc20Address);
+    const oneBalanceBefore = await getOneBalance(hmyClient, web3Client, token, erc20Address);
 
     const operationParams = {
       oneAddress,
@@ -123,6 +118,38 @@ export const operation = async (params: {
 
     if (!checkStatus(operation, prefix, 'operation')) {
       return false;
+    }
+
+    const ethBalanceAfter = await getEthBalance(web3Client, token, erc20Address);
+    logger.info({ prefix, message: 'ETH balance before: ' + ethBalanceBefore });
+    logger.info({ prefix, message: 'ETH balance after: ' + ethBalanceAfter });
+
+    const ethBalanceWrong =
+      type === EXCHANGE_MODE.ETH_TO_ONE
+        ? !new BigNumber(ethBalanceBefore).minus(operationParams.amount).isEqualTo(ethBalanceAfter)
+        : !new BigNumber(ethBalanceBefore).plus(operationParams.amount).isEqualTo(ethBalanceAfter);
+
+    if (ethBalanceWrong) {
+      logger.error({ prefix, message: 'Wrong ETH balance after' });
+      return false;
+    } else {
+      logger.success({ prefix, message: 'ETH balance after OK' });
+    }
+
+    const oneBalanceAfter = await getOneBalance(hmyClient, web3Client, token, erc20Address);
+    logger.info({ prefix, message: 'ONE balance before: ' + oneBalanceBefore });
+    logger.info({ prefix, message: 'ONE balance after: ' + oneBalanceAfter });
+
+    const oneBalanceWrong =
+      type === EXCHANGE_MODE.ETH_TO_ONE
+        ? !new BigNumber(oneBalanceBefore).plus(operationParams.amount).isEqualTo(oneBalanceAfter)
+        : !new BigNumber(oneBalanceBefore).minus(operationParams.amount).isEqualTo(oneBalanceAfter);
+
+    if (oneBalanceWrong) {
+      logger.error({ prefix, message: 'Wrong ONE balance after' });
+      return false;
+    } else {
+      logger.success({ prefix, message: 'ONE balance after OK' });
     }
 
     logger.success({ prefix, message: 'operation OK' });

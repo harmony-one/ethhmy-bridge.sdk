@@ -42,14 +42,14 @@ const operationCall = async () => {
     hmyClient,
   });
 
-  await bridgeSDK.addOneWallet('bff583bf60548e48e5fcfeb92511ef3f007ac5dd0a926a60b61c55f63098897e');
+  await bridgeSDK.addOneWallet('bff345bf60245e48e5fcfeb92511ef3f894ac5dd0a926a60b61c55f63098897e');
 
   await bridgeSDK.sendToken({
     type: EXCHANGE_MODE.ONE_TO_ETH,
     token: TOKEN.BUSD,
     amount: 0.01,
-    oneAddress: 'one1shqpdzthq23n58h43gr4t52fa62rutx4s247sk',
-    ethAddress: '0x21514Ab6773925122E389fE2684A9A938043f475',
+    oneAddress: 'one11234dzthq23n58h43gr4t52fa62rutx4s247sk',
+    ethAddress: '0x12344Ab6773925122E389fE2684A9A938043f475',
   });
 };
 

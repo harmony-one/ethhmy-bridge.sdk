@@ -7,21 +7,18 @@ interface IHmyMethodsInitParams {
   hmyTokenContract: Contract;
   hmyManagerContract: Contract;
   options?: { gasPrice: number; gasLimit: number };
-  userAddress: string;
 }
 
 export class HmyMethods {
   private hmy: Harmony;
   private hmyTokenContract: Contract;
   private hmyManagerContract: Contract;
-  public userAddress: string;
   private options = { gasPrice: 1000000000, gasLimit: 6721900 };
 
   constructor(params: IHmyMethodsInitParams) {
     this.hmy = params.hmy;
     this.hmyTokenContract = params.hmyTokenContract;
     this.hmyManagerContract = params.hmyManagerContract;
-    this.userAddress = params.userAddress;
 
     if (params.options) {
       this.options = params.options;

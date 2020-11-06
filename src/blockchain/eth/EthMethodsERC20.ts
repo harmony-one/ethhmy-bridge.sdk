@@ -9,7 +9,6 @@ export interface IEthMethodsInitParams {
   web3: Web3;
   ethManagerContract: Contract;
   ethManagerAddress: string;
-  userAddress: string;
   gasPrice: number;
   gasLimit: number;
   gasApiKey: string;
@@ -19,7 +18,6 @@ export class EthMethodsERC20 {
   private web3: Web3;
   private ethManagerContract: Contract;
   private ethManagerAddress: string;
-  private userAddress: string;
 
   gasPrice: number;
   gasLimit: number;
@@ -29,7 +27,6 @@ export class EthMethodsERC20 {
     this.web3 = params.web3;
     this.ethManagerContract = params.ethManagerContract;
     this.ethManagerAddress = params.ethManagerAddress;
-    this.userAddress = params.userAddress;
 
     this.gasPrice = params.gasPrice;
     this.gasLimit = params.gasLimit;
@@ -47,7 +44,7 @@ export class EthMethodsERC20 {
     return await erc20Contract.methods
       .approve(this.ethManagerAddress, withDecimals(amount, decimals))
       .send({
-        from: this.userAddress,
+        from: this.web3.eth.defaultAccount,
         gas: this.gasLimit,
         gasPrice: new BN(await this.web3.eth.getGasPrice()).mul(new BN(1)),
       })
@@ -66,7 +63,7 @@ export class EthMethodsERC20 {
     const transaction = await this.ethManagerContract.methods
       .lockToken(erc20Address, withDecimals(amount, decimals), hmyAddrHex)
       .send({
-        from: this.userAddress,
+        from: this.web3.eth.defaultAccount,
         gas: this.gasLimit,
         gasPrice: new BN(await this.web3.eth.getGasPrice()).mul(new BN(1)),
       })

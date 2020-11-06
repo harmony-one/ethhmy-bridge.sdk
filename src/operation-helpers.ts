@@ -46,11 +46,7 @@ export const waitAction = async (
   return action;
 };
 
-export const checkStatus = (
-  operation: { status: STATUS },
-  prefix: string,
-  actionName: string
-) => {
+export const checkStatus = (operation: { status: STATUS }, prefix: string, actionName: string) => {
   if (operation.status === STATUS.SUCCESS) {
     logger.success({ prefix, message: `${actionName} ${operation.status}` });
 
@@ -66,14 +62,19 @@ export const checkStatus = (
   return false;
 };
 
-export const getEthBalance = async (web3Client: IWeb3Client, token: TOKEN, erc20?: string) => {
+export const getEthBalance = async (
+  web3Client: IWeb3Client,
+  token: TOKEN,
+  address: string,
+  erc20?: string
+) => {
   let res = 0;
   switch (token) {
     case TOKEN.BUSD:
-      res = await web3Client.ethMethodsBUSD.checkEthBalance(web3Client.userAddress);
+      res = await web3Client.ethMethodsBUSD.checkEthBalance(address);
       return divDecimals(res, 18);
     case TOKEN.LINK:
-      res = await web3Client.ethMethodsLINK.checkEthBalance(web3Client.userAddress);
+      res = await web3Client.ethMethodsLINK.checkEthBalance(address);
       return divDecimals(res, 18);
     case TOKEN.ERC20:
       const erc20TokenDetails = await web3Client.ethMethodsERC20.tokenDetails(erc20);
@@ -82,10 +83,7 @@ export const getEthBalance = async (web3Client: IWeb3Client, token: TOKEN, erc20
         return 0;
       }
 
-      const balance = await web3Client.ethMethodsERC20.checkEthBalance(
-        erc20,
-        web3Client.userAddress
-      );
+      const balance = await web3Client.ethMethodsERC20.checkEthBalance(erc20, address);
 
       return divDecimals(balance, erc20TokenDetails.decimals);
   }
@@ -95,15 +93,16 @@ export const getOneBalance = async (
   hmyClient: IHmyClient,
   web3Client: IWeb3Client,
   token: TOKEN,
+  address: string,
   erc20?: string
 ) => {
   let res = 0;
   switch (token) {
     case TOKEN.BUSD:
-      res = await hmyClient.hmyMethodsBUSD.checkHmyBalance(hmyClient.userAddress);
+      res = await hmyClient.hmyMethodsBUSD.checkHmyBalance(address);
       return divDecimals(res, 18);
     case TOKEN.LINK:
-      res = await hmyClient.hmyMethodsLINK.checkHmyBalance(hmyClient.userAddress);
+      res = await hmyClient.hmyMethodsLINK.checkHmyBalance(address);
       return divDecimals(res, 18);
     case TOKEN.ERC20:
       const hrc20Address = await hmyClient.hmyMethodsERC20.getMappingFor(erc20);
@@ -114,10 +113,7 @@ export const getOneBalance = async (
         return 0;
       }
 
-      const balance = await hmyClient.hmyMethodsERC20.checkHmyBalance(
-        hrc20Address,
-        hmyClient.userAddress
-      );
+      const balance = await hmyClient.hmyMethodsERC20.checkHmyBalance(hrc20Address, address);
 
       return divDecimals(balance, erc20TokenDetails.decimals);
   }

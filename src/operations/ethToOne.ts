@@ -1,4 +1,4 @@
-import {ACTION_TYPE, IOperation, STATUS} from '../interfaces';
+import { ACTION_TYPE, IOperation, STATUS } from '../interfaces';
 import { logger } from '../utils/logs';
 import { checkStatus, confirmCallback, getActionByType, waitAction } from '../operation-helpers';
 import { EthMethods } from '../blockchain/eth/EthMethods';
@@ -41,6 +41,18 @@ export const ethToOne = async (
 
     logger.info({ prefix, message: 'Status: ' + res.status });
     logger.success({ prefix, message: 'lockToken' });
+  }
+
+  const lockTokenAction = await waitAction(
+    api,
+    operationParams.id,
+    ACTION_TYPE.lockToken,
+    3000,
+    prefix
+  );
+
+  if (!checkStatus(lockTokenAction, prefix, ACTION_TYPE.lockToken)) {
+    return false;
   }
 
   const waitingBlockNumber = await waitAction(
