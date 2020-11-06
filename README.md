@@ -55,7 +55,22 @@ await bridgeSDK.init({
 });
 ```
 
-### 2. Create operation
+### 2. Set user wallet (NodeJS mode)
+#### For ONE -> ETH operation you need to add ONE wallet:
+```
+await bridgeSDK.addOneWallet('bff5443377958e48e5fcfeb92511ef3f007ac5dd0a926a60b61c55f63098897e');
+```
+
+#### For ETH -> ONE operation you need to add Ethereum wallet:
+```
+await bridgeSDK.addEthWallet('1111223395a5c3c1b08639b021f2b456d1f82e4bdd14310410dffb5f1277fe1b');
+```
+
+### 2.1. Set user wallet (Browser mode)
+#### If you use Browser you can sign transactions with Metamask or OneWallet
+
+
+### 3. Create operation
 
 ```
 let oprationId;
@@ -69,7 +84,7 @@ await bridgeSDK.sendToken({
 }, (id) => oprationId = id);
 ```
 
-### 3. Get operation details
+### 4. Get operation details
 
 ```
 const operation = await bridgeSDK.api.getOperation(operationId);
