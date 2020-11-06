@@ -8,10 +8,10 @@ npm i bridge-sdk --save
 
 ## How to use
 
-### Full example
+### 1. Init SDK instance
 
 ```
-import { BridgeSDK, TOKEN, EXCHANGE_MODE } from 'bridge-sdk';
+import { BridgeSDK, TOKEN, EXCHANGE_MODE, STATUS } from 'bridge-sdk';
 
 const apiConfig = {
   validators: [
@@ -46,6 +46,41 @@ const hmyClient = {
   },
 };
 
+const bridgeSDK = new BridgeSDK();
+
+await bridgeSDK.init({
+  api: apiConfig,
+  ethClient,
+  hmyClient,
+});
+```
+
+### 2. Create operation
+
+```
+let oprationId;
+
+await bridgeSDK.sendToken({
+  type: EXCHANGE_MODE.ETH_TO_ONE,
+  token: TOKEN.BUSD,
+  amount: 0.01,
+  oneAddress: 'one11234dzthq23n58h43gr4t52fa62rutx4s247sk',
+  ethAddress: '0x12344Ab6773925122E389fE2684A9A938043f475',
+}, (id) => oprationId = id);
+```
+
+### 3. Get operation details
+
+```
+const operation = await bridgeSDK.api.getOperation(operationId);
+```
+
+### Full Eth -> One example
+
+```
+const { BridgeSDK, TOKEN, EXCHANGE_MODE, STATUS } = require('..');
+const { ethClient, hmyClient, apiConfig } = require('./configs');
+
 const operationCall = async () => {
   const bridgeSDK = new BridgeSDK();
 
@@ -55,15 +90,33 @@ const operationCall = async () => {
     hmyClient,
   });
 
-  await bridgeSDK.addEthWallet('07b50f1498a5c3c1b08639b021f2b385d1f82e4bdd14312210dffb5f1277fe1b');
+  await bridgeSDK.addOneWallet('bff5443377958e48e5fcfeb92511ef3f007ac5dd0a926a60b61c55f63098897e');
 
-  await bridgeSDK.sendToken({
-    type: EXCHANGE_MODE.ETH_TO_ONE,
-    token: TOKEN.BUSD,
-    amount: 0.01,
-    oneAddress: 'one11234dzthq23n58h43gr4t52fa62rutx4s247sk',
-    ethAddress: '0x12344Ab6773925122E389fE2684A9A938043f475',
-  });
+  let operationId: string;
+
+  // display operation status
+  setInterval(async () => {
+    if (operationId) {
+      const operation = await bridgeSDK.api.getOperation(operationId);
+
+      console.log(operation.status);
+      console.log(
+        'Action: ',
+        operation.actions.filter((a: any) => a.status === STATUS.IN_PROGRESS)
+      );
+    }
+  }, 3000);
+
+  await bridgeSDK.sendToken(
+    {
+      type: EXCHANGE_MODE.ONE_TO_ETH,
+      token: TOKEN.BUSD,
+      amount: 0.01,
+      oneAddress: 'one1sh446677883n58h43gr4t52fa62rutx4s247sk',
+      ethAddress: '0x21514Ab67739233445567fE2684A9A938043f475',
+    },
+    (id: string) => (operationId = id)
+  );
 };
 
 operationCall();
@@ -71,3 +124,11 @@ operationCall();
 
 ### You can see more examples here
 https://github.com/harmony-one/ethhmy-bridge.sdk/tree/main/examples
+
+
+## More API methods
+
+### getOperations
+```
+const operations = await bridgeSDK.api.getOperations({ size: 50, page: 0 });
+```
