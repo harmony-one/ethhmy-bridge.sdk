@@ -89,8 +89,10 @@ await bridgeSDK.sendToken({
 ```
 const operation = await bridgeSDK.api.getOperation(operationId);
 ```
+###
+## Full Eth -> One example
 
-### Full Eth -> One example
+https://github.com/harmony-one/ethhmy-bridge.sdk/blob/main/examples/one_to_eth_%20NodeJS.js
 
 ```
 const { BridgeSDK, TOKEN, EXCHANGE_MODE, STATUS } = require('bridge-sdk');
