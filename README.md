@@ -11,7 +11,7 @@ npm i bridge-sdk --save
 ### 1. Init SDK instance
 
 ```
-import { BridgeSDK, TOKEN, EXCHANGE_MODE, STATUS } from 'bridge-sdk';
+const { BridgeSDK, TOKEN, EXCHANGE_MODE, STATUS } = require('bridge-sdk');
 
 const apiConfig = {
   validators: [
