@@ -117,7 +117,7 @@ const operationCall = async () => {
       console.log(operation.status);
       console.log(
         'Action: ',
-        operation.actions.filter((a: any) => a.status === STATUS.IN_PROGRESS)
+        operation.actions.filter((a) => a.status === STATUS.IN_PROGRESS)
       );
     }
   }, 3000);
@@ -130,7 +130,7 @@ const operationCall = async () => {
       oneAddress: 'one1sh446677883n58h43gr4t52fa62rutx4s247sk',
       ethAddress: '0x21514Ab67739233445567fE2684A9A938043f475',
     },
-    (id: string) => (operationId = id)
+    (id) => (operationId = id)
   );
 };
 
