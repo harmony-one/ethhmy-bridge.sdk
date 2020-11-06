@@ -1,7 +1,7 @@
 {
   "name": "bridge-sdk",
   "version": "1.0.0",
-  "description": "",
+  "description": "bridge-sdk",
   "main": "./lib/index.js",
   "types": "lib/index.d.ts",
   "scripts": {
@@ -10,10 +10,10 @@
   },
   "repository": {
     "type": "git",
-    "url": ""
+    "url": "https://github.com/harmony-one/ethhmy-bridge.sdk"
   },
   "keywords": [],
-  "author": "",
+  "author": "harmony",
   "license": "ISC",
   "devDependencies": {
     "@types/bip39": "^3.0.0",

@@ -105,6 +105,8 @@ keys/
 dist/
 lib/
 
+.idea
+
 # encrypted keys
 encrypted/
 
