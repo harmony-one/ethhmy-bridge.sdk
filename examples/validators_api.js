@@ -1,14 +1,10 @@
 const { BridgeSDK } = require('..');
-const { ethClient, hmyClient, apiConfig } = require('./configs');
+const configs = require('../lib/configs');
 
 const operationCall = async () => {
   const bridgeSDK = new BridgeSDK();
 
-  await bridgeSDK.init({
-    api: apiConfig,
-    ethClient,
-    hmyClient,
-  });
+  await bridgeSDK.init(configs.testnet);
 
   // get operations
   const operations = await bridgeSDK.api.getOperations({ size: 50, page: 0 });

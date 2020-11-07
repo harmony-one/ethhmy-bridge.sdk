@@ -3,7 +3,6 @@ import { logger } from '../utils/logs';
 import { checkStatus, confirmCallback, getActionByType, waitAction } from '../operation-helpers';
 import { EthMethods } from '../blockchain/eth/EthMethods';
 import { HmyMethods } from '../blockchain/hmy/HmyMethods';
-import { config } from '../testConfig';
 import { ValidatorsAPI } from '../api';
 
 export const oneToEth = async (
@@ -11,7 +10,8 @@ export const oneToEth = async (
   operationParams: IOperation,
   ethMethods: EthMethods,
   hmyMethods: HmyMethods,
-  prefix: string
+  prefix: string,
+  maxWaitingTime: number
 ) => {
   let operation = await api.getOperation(operationParams.id);
 
@@ -49,7 +49,7 @@ export const oneToEth = async (
     api,
     operationParams.id,
     ACTION_TYPE.unlockToken,
-    config.maxWaitingTime,
+    maxWaitingTime,
     prefix
   );
 

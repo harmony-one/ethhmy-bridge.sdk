@@ -22,6 +22,7 @@ export const operation = async (params: {
   oneAddress: string;
   ethAddress: string;
   erc20Address?: string;
+  maxWaitingTime: number;
 }) => {
   const {
     api,
@@ -33,6 +34,7 @@ export const operation = async (params: {
     type,
     amount,
     erc20Address,
+    maxWaitingTime,
   } = params;
 
   const prefix = `[${token.toUpperCase()}: ${type.toUpperCase()}]`;
@@ -87,7 +89,8 @@ export const operation = async (params: {
           operation,
           web3Client.ethMethodsERC20,
           hmyClient.hmyMethodsERC20,
-          prefix
+          prefix,
+          maxWaitingTime
         );
       }
 
@@ -97,16 +100,17 @@ export const operation = async (params: {
           operation,
           web3Client.ethMethodsERC20,
           hmyClient.hmyMethodsERC20,
-          prefix
+          prefix,
+          maxWaitingTime
         );
       }
     } else {
       if (type === EXCHANGE_MODE.ETH_TO_ONE) {
-        res = await ethToOne(api, operation, ethMethods, prefix);
+        res = await ethToOne(api, operation, ethMethods, prefix, maxWaitingTime);
       }
 
       if (type === EXCHANGE_MODE.ONE_TO_ETH) {
-        res = await oneToEth(api, operation, ethMethods, hmyMethods, prefix);
+        res = await oneToEth(api, operation, ethMethods, hmyMethods, prefix, maxWaitingTime);
       }
     }
 

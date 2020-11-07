@@ -4,7 +4,6 @@ import { checkStatus, confirmCallback, getActionByType, waitAction } from '../op
 import { sleep } from '../utils';
 import { EthMethodsERC20 } from '../blockchain/eth/EthMethodsERC20';
 import { HmyMethodsERC20 } from '../blockchain/hmy/HmyMethodsERC20';
-import { config } from '../testConfig';
 import { ValidatorsAPI } from '../api';
 
 export const oneToEthErc20 = async (
@@ -12,7 +11,8 @@ export const oneToEthErc20 = async (
   operationParams: IOperation,
   ethMethods: EthMethodsERC20,
   hmyMethods: HmyMethodsERC20,
-  prefix: string
+  prefix: string,
+  maxWaitingTime: number
 ) => {
   let operation = await api.getOperation(operationParams.id);
 
@@ -75,7 +75,7 @@ export const oneToEthErc20 = async (
     api,
     operationParams.id,
     ACTION_TYPE.unlockToken,
-    config.maxWaitingTime,
+    maxWaitingTime,
     prefix
   );
 

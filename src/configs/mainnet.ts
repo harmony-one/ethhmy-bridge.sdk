@@ -1,4 +1,4 @@
-export const apiConfig = {
+const api = {
   validators: [
     'https://be1.bridge.hmny.io',
     'https://be2.bridge.hmny.io',
@@ -8,7 +8,7 @@ export const apiConfig = {
   assetServiceUrl: 'https://be4.bridge.hmny.io', // assets statistic service
 };
 
-export const ethClient = {
+const ethClient = {
   nodeURL: 'https://mainnet.infura.io/v3/acb534b53d3a47b09d7886064f8e51b6',
   contracts: {
     busd: '0x4fabb145d64652a948d72533023f6e7a623c7c53',
@@ -17,9 +17,11 @@ export const ethClient = {
     linkManager: '0xfE601dE9D4295274b9904D5a9Ad7069F23eE2B32',
     erc20Manager: '0x2dCCDB493827E15a5dC8f8b72147E6c4A5620857',
   },
+  gasPrice: 100000000000,
+  gasLimit: 150000,
 };
 
-export const hmyClient = {
+const hmyClient = {
   nodeURL: 'https://api.s0.t.hmny.io',
   chainId: 1,
   contracts: {
@@ -29,4 +31,10 @@ export const hmyClient = {
     linkManager: '0xc0c7b147910ef11f6454dc1918ecde9a2b64a3a8',
     erc20Manager: '0x2fbbcef71544c461edfc311f42e3583d5f9675d1',
   },
+};
+
+export const mainnet = {
+  api,
+  ethClient,
+  hmyClient,
 };

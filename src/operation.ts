@@ -22,8 +22,9 @@ export const operation = async (
     oneAddress: string;
     ethAddress: string;
     erc20Address?: string;
+    maxWaitingTime: number;
   },
-  callback?: (id: string) => void
+  callback: (id: string) => void
 ) => {
   const {
     api,
@@ -35,6 +36,7 @@ export const operation = async (
     type,
     amount,
     erc20Address,
+    maxWaitingTime,
   } = params;
 
   const prefix = `[${token.toUpperCase()}: ${type.toUpperCase()}]`;
@@ -99,7 +101,8 @@ export const operation = async (
           operation,
           web3Client.ethMethodsERC20,
           hmyClient.hmyMethodsERC20,
-          prefix
+          prefix,
+          maxWaitingTime
         );
       }
 
@@ -109,16 +112,17 @@ export const operation = async (
           operation,
           web3Client.ethMethodsERC20,
           hmyClient.hmyMethodsERC20,
-          prefix
+          prefix,
+          maxWaitingTime
         );
       }
     } else {
       if (type === EXCHANGE_MODE.ETH_TO_ONE) {
-        res = await ethToOne(api, operation, ethMethods, prefix);
+        res = await ethToOne(api, operation, ethMethods, prefix, maxWaitingTime);
       }
 
       if (type === EXCHANGE_MODE.ONE_TO_ETH) {
-        res = await oneToEth(api, operation, ethMethods, hmyMethods, prefix);
+        res = await oneToEth(api, operation, ethMethods, hmyMethods, prefix, maxWaitingTime);
       }
     }
 
@@ -147,6 +151,9 @@ export const operation = async (
     }
 
     logger.error({ prefix, message: error });
+
+    throw new Error(error);
+
     return false;
   }
 };

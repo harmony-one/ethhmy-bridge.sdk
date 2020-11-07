@@ -2,14 +2,14 @@ import { ACTION_TYPE, IOperation, STATUS } from '../interfaces';
 import { logger } from '../utils/logs';
 import { checkStatus, confirmCallback, getActionByType, waitAction } from '../operation-helpers';
 import { EthMethods } from '../blockchain/eth/EthMethods';
-import { config } from '../testConfig';
 import { ValidatorsAPI } from '../api';
 
 export const ethToOne = async (
   api: ValidatorsAPI,
   operationParams: IOperation,
   ethMethods: EthMethods,
-  prefix: string
+  prefix: string,
+  maxWaitingTime: number
 ) => {
   let operation = await api.getOperation(operationParams.id);
 
@@ -47,7 +47,7 @@ export const ethToOne = async (
     api,
     operationParams.id,
     ACTION_TYPE.lockToken,
-    3000,
+    maxWaitingTime,
     prefix
   );
 
@@ -59,7 +59,7 @@ export const ethToOne = async (
     api,
     operationParams.id,
     ACTION_TYPE.waitingBlockNumber,
-    300,
+    maxWaitingTime,
     prefix
   );
 
@@ -71,7 +71,7 @@ export const ethToOne = async (
     api,
     operationParams.id,
     ACTION_TYPE.mintToken,
-    config.maxWaitingTime,
+    maxWaitingTime,
     prefix
   );
 
