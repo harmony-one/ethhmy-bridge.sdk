@@ -19,12 +19,14 @@ const bridgeSDK = new BridgeSDK({ logLevel: 0 });
 await bridgeSDK.init(configs.testnet);
 ```
 #### You can set logLevel 0-2
+```
 0 - logs disabled
-1 - only errors and suucess notify
+1 - only errors and suucess
 2- full log (errors, suucees, info, panding, waiting etc)
+```
 
 #### You can use ```config.testnet``` or ```config.mainnet```. 
-Also you can create config with your contracts and validators - look here for examples https://github.com/harmony-one/ethhmy-bridge.sdk/blob/main/src/configs/mainnet.ts
+Also you can create config with your custom contracts and validators - like here https://github.com/harmony-one/ethhmy-bridge.sdk/blob/main/src/configs/mainnet.ts
 
 
 ### 2. Set user wallet (NodeJS mode)
@@ -43,7 +45,6 @@ await bridgeSDK.addEthWallet('1111223395a5c3c1b08639b021f2b456d1f82e4bdd14310410
 
 
 ### 3. Create operation
-#### if you want to send ERC20 token - you will need to set token ```token: TOKEN.ERC20``` and add one more param ```erc20Address```
 ```
 let oprationId;
 
@@ -61,13 +62,16 @@ try {
 ```
 #### You don't need to do anything more. All other actions will be done automaticly. If you work in browser mode - sign transactions action also will be called automaticly. You need only to fetch and display operation status (step 4)
 
-#### Use try-catch to catch error with reason message. Also you can set high logLevel for better debugging (look at step 1).
+#### if you want to send ERC20 token - you need to set token ````token: TOKEN.ERC20```` and add one more param ``erc20Address: 0x...``
+
+#### Use try-catch to catch error with reason message. Also you can set logLevel = 2 for better debugging (look at step 1).
 
 ### 4. Get operation details
 
 ```
 const operation = await bridgeSDK.api.getOperation(operationId);
 ```
+#### Recommended to use this call in a cycle if you want to monitoring & display operation status (look at full example)
 ###
 ## Eth -> One (full example)
 
