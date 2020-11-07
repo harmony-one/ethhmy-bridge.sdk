@@ -12,48 +12,20 @@ npm i bridge-sdk --save
 
 ```
 const { BridgeSDK, TOKEN, EXCHANGE_MODE, STATUS } = require('bridge-sdk');
+const configs = require('bridge-sdk/lib/configs');
 
-const apiConfig = {
-  validators: [
-    'https://be1.bridge.hmny.io',
-    'https://be2.bridge.hmny.io',
-    'https://be3.bridge.hmny.io',
-  ],
-  threshold: 2, // minimum validators number to do operation
-  assetServiceUrl: 'https://be4.bridge.hmny.io', // assets statistic service
-};
+const bridgeSDK = new BridgeSDK({ logLevel: 0 });
 
-const ethClient = {
-  nodeURL: 'https://mainnet.infura.io/v3/acb534b53d3a47b09d7886064f8e51b6',
-  contracts: {
-    busd: '0x4fabb145d64652a948d72533023f6e7a623c7c53',
-    link: '0x514910771af9ca656af840dff83e8264ecf986ca',
-    busdManager: '0xfD53b1B4AF84D59B20bF2C20CA89a6BeeAa2c628',
-    linkManager: '0xfE601dE9D4295274b9904D5a9Ad7069F23eE2B32',
-    erc20Manager: '0x2dCCDB493827E15a5dC8f8b72147E6c4A5620857',
-  },
-};
-
-const hmyClient = {
-  nodeURL: 'https://api.s0.t.hmny.io',
-  chainId: 1,
-  contracts: {
-    busd: '0xe176ebe47d621b984a73036b9da5d834411ef734',
-    link: '0x218532a12a389a4a92fc0c5fb22901d1c19198aa',
-    busdManager: '0x05d11b7082d5634e0318d818a2f0cd381b371ea5',
-    linkManager: '0xc0c7b147910ef11f6454dc1918ecde9a2b64a3a8',
-    erc20Manager: '0x2fbbcef71544c461edfc311f42e3583d5f9675d1',
-  },
-};
-
-const bridgeSDK = new BridgeSDK();
-
-await bridgeSDK.init({
-  api: apiConfig,
-  ethClient,
-  hmyClient,
-});
+await bridgeSDK.init(configs.testnet);
 ```
+#### You can set logLevel 0-2
+0 - logs disabled
+1 - only errors and suucess notify
+2- full log (errors, suucees, info, panding, waiting etc)
+
+#### You can use ```config.testnet``` or ```config.mainnet```. 
+Also you can create config with your contracts and validators - look here for examples https://github.com/harmony-one/ethhmy-bridge.sdk/blob/main/src/configs/mainnet.ts
+
 
 ### 2. Set user wallet (NodeJS mode)
 #### For ONE -> ETH operation you need to add ONE wallet:
@@ -71,19 +43,25 @@ await bridgeSDK.addEthWallet('1111223395a5c3c1b08639b021f2b456d1f82e4bdd14310410
 
 
 ### 3. Create operation
-
+#### if you want to send ERC20 token - you will need to set token ```token: TOKEN.ERC20``` and add one more param ```erc20Address```
 ```
 let oprationId;
 
-await bridgeSDK.sendToken({
-  type: EXCHANGE_MODE.ETH_TO_ONE,
-  token: TOKEN.BUSD,
-  amount: 0.01,
-  oneAddress: 'one11234dzthq23n58h43gr4t52fa62rutx4s247sk',
-  ethAddress: '0x12344Ab6773925122E389fE2684A9A938043f475',
-}, (id) => oprationId = id);
+try {
+  await bridgeSDK.sendToken({
+    type: EXCHANGE_MODE.ETH_TO_ONE,
+    token: TOKEN.BUSD,
+    amount: 0.01,
+    oneAddress: 'one11234dzthq23n58h43gr4t52fa62rutx4s247sk',
+    ethAddress: '0x12344Ab6773925122E389fE2684A9A938043f475',
+  }, (id) => oprationId = id);
+} catch (e) {
+  console.log(e.message);
+}
 ```
 #### You don't need to do anything more. All other actions will be done automaticly. If you work in browser mode - sign transactions action also will be called automaticly. You need only to fetch and display operation status (step 4)
+
+#### Use try-catch to catch error with reason message. Also you can set high logLevel for better debugging (look at step 1).
 
 ### 4. Get operation details
 
@@ -93,48 +71,56 @@ const operation = await bridgeSDK.api.getOperation(operationId);
 ###
 ## Eth -> One (full example)
 
-https://github.com/harmony-one/ethhmy-bridge.sdk/blob/main/examples/one_to_eth_%20NodeJS.js
+https://github.com/harmony-one/ethhmy-bridge.sdk/blob/main/examples/eth_to_one-node.js
 
 ```
 const { BridgeSDK, TOKEN, EXCHANGE_MODE, STATUS } = require('bridge-sdk');
-const { ethClient, hmyClient, apiConfig } = require('./configs');
+const configs = require('bridge-sdk/lib/configs');
 
 const operationCall = async () => {
-  const bridgeSDK = new BridgeSDK();
+    const bridgeSDK = new BridgeSDK({ logLevel: 2 }); // 2 - full logs, 1 - only success & errors, 0 - logs off
 
-  await bridgeSDK.init({
-    api: apiConfig,
-    ethClient,
-    hmyClient,
-  });
+    await bridgeSDK.init(configs.testnet);
 
-  await bridgeSDK.addOneWallet('bff5443377958e48e5fcfeb92511ef3f007ac5dd0a926a60b61c55f63098897e');
+    await bridgeSDK.addEthWallet('cbcf3af28e37d8b69c4ea5856f2727f57ad01d3e86bec054d71fa83fc246f35b');
 
-  let operationId: string;
+    let operationId;
 
-  // display operation status
-  setInterval(async () => {
-    if (operationId) {
-      const operation = await bridgeSDK.api.getOperation(operationId);
+    // display operation status
+    let intervalId = setInterval(async () => {
+        if (operationId) {
+            const operation = await bridgeSDK.api.getOperation(operationId);
 
-      console.log(operation.status);
-      console.log(
-        'Action: ',
-        operation.actions.filter((a) => a.status === STATUS.IN_PROGRESS)
-      );
+            /*
+            console.log(operation.status);
+            console.log(
+              'Action: ',
+              operation.actions.filter(a => a.status === STATUS.IN_PROGRESS)
+            );
+            */
+
+            if (operation.status !== STATUS.IN_PROGRESS) {
+                clearInterval(intervalId);
+            }
+        }
+    }, 4000);
+
+    try {
+        await bridgeSDK.sendToken(
+            {
+                type: EXCHANGE_MODE.ETH_TO_ONE,
+                token: TOKEN.BUSD,
+                amount: 0.01,
+                oneAddress: 'one1we0fmuz9wdncqljwkpgj79k49cp4jrt5hpy49j',
+                ethAddress: '0xc491a4c5c762b9E9453dB0A9e6a4431057a5fE54',
+            },
+            id => (operationId = id)
+        );
+    } catch (e) {
+        console.log('Error: ', e.message);
     }
-  }, 3000);
 
-  await bridgeSDK.sendToken(
-    {
-      type: EXCHANGE_MODE.ONE_TO_ETH,
-      token: TOKEN.BUSD,
-      amount: 0.01,
-      oneAddress: 'one1sh446677883n58h43gr4t52fa62rutx4s247sk',
-      ethAddress: '0x21514Ab67739233445567fE2684A9A938043f475',
-    },
-    (id) => (operationId = id)
-  );
+    process.exit();
 };
 
 operationCall();
