@@ -45,7 +45,7 @@ await bridgeSDK.addEthWallet('1111223395a5c3c1b08639b021f2b456d1f82e4bdd14310410
 #### If you use Browser you can sign transactions with Metamask or OneWallet
 
 
-### 3. Create operation
+### 3. Send tokens
 ```
 let oprationId;
 
