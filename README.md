@@ -22,7 +22,7 @@ await bridgeSDK.init(configs.testnet);
 ```
 0 - logs disabled
 1 - only errors and suucess
-2- full log (errors, suucees, info, panding, waiting etc)
+2 - full log (errors, suucees, info, panding, waiting etc)
 ```
 
 #### You can use ```config.testnet``` or ```config.mainnet```. 
@@ -62,16 +62,16 @@ try {
 ```
 #### You don't need to do anything more. All other actions will be done automaticly. If you work in browser mode - sign transactions action also will be called automaticly. You need only to fetch and display operation status (step 4)
 
-#### if you want to send ERC20 token - you need to set token ````token: TOKEN.ERC20```` and add one more param ``erc20Address: 0x...``
+#### * if you want to send ERC20 token - you need to set token ````token: TOKEN.ERC20```` and add one more param ``erc20Address: 0x...``
 
-#### Use try-catch to catch error with reason message. Also you can set logLevel = 2 for better debugging (look at step 1).
+#### * Use try-catch to catch error with reason message. Also you can set logLevel = 2 for better debugging (look at step 1).
 
 ### 4. Get operation details
 
 ```
 const operation = await bridgeSDK.api.getOperation(operationId);
 ```
-#### Recommended to use this call in a cycle if you want to monitoring & display operation status (look at full example)
+#### * Recommended to use this call in a cycle if you want to monitoring & display operation status (look at full example)
 ###
 ## Eth -> One (full example)
 
@@ -132,6 +132,17 @@ operationCall();
 
 ### You can see more examples here
 https://github.com/harmony-one/ethhmy-bridge.sdk/tree/main/examples
+
+* If you want to copy this this example sources to your project - you need to change:
+```
+const { BridgeSDK, TOKEN, EXCHANGE_MODE, STATUS } = require('..');
+const configs = require('../lib/configs');
+```
+to
+```
+const { BridgeSDK, TOKEN, EXCHANGE_MODE, STATUS } = require('bridge-sdk');
+const configs = require('bridge-sdk/lib/configs');
+```
 
 
 ## More API methods
