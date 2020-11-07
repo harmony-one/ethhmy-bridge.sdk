@@ -21,8 +21,8 @@ await bridgeSDK.init(configs.testnet);
 #### You can set logLevel 0-2
 ```
 0 - logs disabled
-1 - only errors and suucess
-2 - full log (errors, suucees, info, panding, waiting etc)
+1 - only errors and success
+2 - full log (errors, succees, info, panding, waiting etc)
 ```
 
 #### You can use ```config.testnet``` or ```config.mainnet```. 
