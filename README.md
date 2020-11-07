@@ -25,8 +25,8 @@ await bridgeSDK.init(configs.testnet);
 2 - full log (errors, succees, info, panding, waiting etc)
 ```
 
-#### You can use ```config.mainnet```: Harmony mainnet + Ethereum mainnet.
-#### Or you can use ```config.testnet```: Harmony testnet + Ethereum Kovan testnet.
+#### You can use ```config.mainnet```: Harmony mainnet <> Ethereum mainnet.
+#### Or you can use ```config.testnet```: Harmony testnet <> Ethereum Kovan testnet.
 Also you can create config with your custom contracts and validators - like here https://github.com/harmony-one/ethhmy-bridge.sdk/blob/main/src/configs/mainnet.ts
 
 
