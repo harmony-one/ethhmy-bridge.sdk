@@ -10,7 +10,7 @@ npm i bridge-sdk --save
 
 ### 1. Init SDK instance
 
-```
+```js
 const { BridgeSDK, TOKEN, EXCHANGE_MODE, STATUS } = require('bridge-sdk');
 const configs = require('bridge-sdk/lib/configs');
 
@@ -32,12 +32,12 @@ Also you can create config with your custom contracts and validators - like here
 
 ### 2. Set user wallet (NodeJS mode)
 #### For ONE -> ETH operation you need to add ONE wallet:
-```
+```js
 await bridgeSDK.addOneWallet('bff5443377958e48e5fcfeb92511ef3f007ac5dd0a926a60b61c55f63098897e');
 ```
 
 #### For ETH -> ONE operation you need to add Ethereum wallet:
-```
+```js
 await bridgeSDK.addEthWallet('1111223395a5c3c1b08639b021f2b456d1f82e4bdd14310410dffb5f1277fe1b');
 ```
 
@@ -45,8 +45,8 @@ await bridgeSDK.addEthWallet('1111223395a5c3c1b08639b021f2b456d1f82e4bdd14310410
 #### If you use Browser you can sign transactions with Metamask or OneWallet
 
 
-### 3. Create operation
-```
+### 3. Send tokens
+```js
 let oprationId;
 
 try {
@@ -69,7 +69,7 @@ You don't need to do anything more. All other actions will be done automaticly. 
 
 ### 4. Get operation details
 
-```
+```js
 const operation = await bridgeSDK.api.getOperation(operationId);
 ```
 #### * Recommended to use this call in a cycle if you want to monitoring & display operation status (look at full example)
@@ -78,7 +78,7 @@ const operation = await bridgeSDK.api.getOperation(operationId);
 
 https://github.com/harmony-one/ethhmy-bridge.sdk/blob/main/examples/eth_to_one-node.js
 
-```
+```js
 const { BridgeSDK, TOKEN, EXCHANGE_MODE, STATUS } = require('bridge-sdk');
 const configs = require('bridge-sdk/lib/configs');
 
@@ -135,12 +135,12 @@ operationCall();
 https://github.com/harmony-one/ethhmy-bridge.sdk/tree/main/examples
 
 * If you want to copy this this example sources to your project - you need to change:
-```
+```js
 const { BridgeSDK, TOKEN, EXCHANGE_MODE, STATUS } = require('..');
 const configs = require('../lib/configs');
 ```
 to
-```
+```js
 const { BridgeSDK, TOKEN, EXCHANGE_MODE, STATUS } = require('bridge-sdk');
 const configs = require('bridge-sdk/lib/configs');
 ```
@@ -149,6 +149,6 @@ const configs = require('bridge-sdk/lib/configs');
 ## More API methods
 
 ### getOperations
-```
+```js
 const operations = await bridgeSDK.api.getOperations({ size: 50, page: 0 });
 ```
