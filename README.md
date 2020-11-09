@@ -55,6 +55,11 @@ bridgeSDK.setUseOneWallet(true);
 ```
 full example here https://github.com/harmony-one/ethhmy-bridge.sdk/blob/main/examples/eth_to_one-browser.js
 
+#### MathWallet:
+```js
+bridgeSDK.setUseMathWallet(true);
+```
+
 ### 3. Send tokens
 ```js
 let oprationId;
