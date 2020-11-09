@@ -10,10 +10,6 @@ let signale = {
   pending: logFunc,
 };
 
-if (!window) {
-  signale = require('signale');
-}
-
 const context: any = this;
 
 let logLevel = 0;
