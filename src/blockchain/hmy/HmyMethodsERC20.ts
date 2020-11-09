@@ -51,8 +51,7 @@ export class HmyMethodsERC20 {
     decimals: number,
     sendTxCallback?: (hash: string) => void
   ) => {
-    const tokenJson = require('../out/MyERC20.json');
-    const hmyTokenContract = this.hmy.contracts.createContract(tokenJson.abi, hrc20Address);
+    const hmyTokenContract = this.hmy.contracts.createContract(MyERC20Abi, hrc20Address);
 
     return new Promise(async (resolve, reject) => {
       try {
