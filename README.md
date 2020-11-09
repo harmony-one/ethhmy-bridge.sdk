@@ -43,7 +43,22 @@ await bridgeSDK.addEthWallet('1111223395a5c3c1b08639b021f2b456d1f82e4bdd14310410
 
 ### 2.1. Set user wallet (Browser mode)
 #### If you use Browser you can sign transactions with Metamask or OneWallet
+#### Metamask:
+```js
+bridgeSDK.setUseMetamask(true);
+```
+full example here https://github.com/harmony-one/ethhmy-bridge.sdk/blob/main/examples/eth_to_one-browser.js
 
+#### OneWallet:
+```js
+bridgeSDK.setUseOneWallet(true);
+```
+full example here https://github.com/harmony-one/ethhmy-bridge.sdk/blob/main/examples/eth_to_one-browser.js
+
+#### MathWallet:
+```js
+bridgeSDK.setUseMathWallet(true);
+```
 
 ### 3. Send tokens
 ```js
