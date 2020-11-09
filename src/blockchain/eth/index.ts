@@ -33,7 +33,7 @@ export interface IWeb3ClientParams {
 
 export const getWeb3Client = (params: IWeb3ClientParams): IWeb3Client => {
   // @ts-ignore
-  const web3URL = window && window.web3 ? window.web3.currentProvider : params.nodeURL;
+  const web3URL = this.window && this.window.web3 ? this.window.web3.currentProvider : params.nodeURL;
 
   const web3 = new Web3(web3URL);
 
