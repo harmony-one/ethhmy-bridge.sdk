@@ -43,6 +43,12 @@ export class BridgeSDK {
     await this.web3Client.addWallet(privateKey);
   };
 
+  setUseMetamask = (value: boolean) => this.web3Client.setUseMetamask(value);
+
+  setUseOneWallet = (value: boolean) => this.hmyClient.setUseOneWallet(value);
+
+  setUseMathWallet = (value: boolean) => this.hmyClient.setUseMathWallet(value);
+
   sendToken = async (
     params: {
       type: EXCHANGE_MODE;

@@ -14,6 +14,7 @@ export interface IWeb3Client {
   ethMethodsERC20: EthMethodsERC20;
   getUserAddress: () => string;
   addWallet: (pk: string) => void;
+  setUseMetamask: (value: boolean) => void;
 }
 
 export interface IWeb3ClientParams {
@@ -108,5 +109,10 @@ export const getWeb3Client = (params: IWeb3ClientParams): IWeb3Client => {
     ethMethodsLINK,
     ethMethodsERC20,
     getUserAddress: () => ethUserAccount && ethUserAccount.address,
+    setUseMetamask: (value: boolean) => {
+      ethMethodsBUSD.setUseMetamask(value);
+      ethMethodsLINK.setUseMetamask(value);
+      ethMethodsERC20.setUseMetamask(value);
+    },
   };
 };

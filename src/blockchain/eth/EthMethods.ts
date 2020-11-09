@@ -19,6 +19,7 @@ export class EthMethods {
   private ethManagerContract: Contract;
   private ethTokenContract: Contract;
   private ethManagerAddress: string;
+  private useMetamask = false;
 
   gasPrice: number;
   gasLimit: number;
@@ -35,11 +36,19 @@ export class EthMethods {
     this.gasApiKey = params.gasApiKey;
   }
 
+  setUseMetamask = (value: boolean) => (this.useMetamask = value);
+
   approveEthManger = async (amount: number, sendTxCallback?: (hash: string) => void) => {
+    let accounts;
+    if (this.useMetamask) {
+      // @ts-ignore
+      accounts = await ethereum.enable();
+    }
+
     return await this.ethTokenContract.methods
       .approve(this.ethManagerAddress, withDecimals(amount, 18))
       .send({
-        from: this.web3.eth.defaultAccount,
+        from: this.useMetamask ? accounts[0] : this.web3.eth.defaultAccount,
         gas: this.gasLimit,
         gasPrice: new BN(await this.web3.eth.getGasPrice()).mul(new BN(1)),
       })
@@ -47,12 +56,18 @@ export class EthMethods {
   };
 
   lockToken = async (userAddr: string, amount: number, sendTxCallback?: (hash: string) => void) => {
+    let accounts;
+    if (this.useMetamask) {
+      // @ts-ignore
+      accounts = await ethereum.enable();
+    }
+
     const hmyAddrHex = getAddress(userAddr).checksum;
 
     const transaction = await this.ethManagerContract.methods
       .lockToken(withDecimals(amount, 18), hmyAddrHex)
       .send({
-        from: this.web3.eth.defaultAccount,
+        from: this.useMetamask ? accounts[0] : this.web3.eth.defaultAccount,
         gas: this.gasLimit,
         gasPrice: new BN(await this.web3.eth.getGasPrice()).mul(new BN(1)),
       })

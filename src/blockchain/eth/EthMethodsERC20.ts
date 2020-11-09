@@ -18,6 +18,7 @@ export class EthMethodsERC20 {
   private web3: Web3;
   private ethManagerContract: Contract;
   private ethManagerAddress: string;
+  private useMetamask = false;
 
   gasPrice: number;
   gasLimit: number;
@@ -33,18 +34,26 @@ export class EthMethodsERC20 {
     this.gasApiKey = params.gasApiKey;
   }
 
+  setUseMetamask = (value: boolean) => (this.useMetamask = value);
+
   approveEthManger = async (
     erc20Address: string,
     amount: number,
     decimals: number,
     sendTxCallback?: (hash: string) => void
   ) => {
+    let accounts;
+    if (this.useMetamask) {
+      // @ts-ignore
+      accounts = await ethereum.enable();
+    }
+
     const erc20Contract = new this.web3.eth.Contract(MyERC20Abi, erc20Address);
 
     return await erc20Contract.methods
       .approve(this.ethManagerAddress, withDecimals(amount, decimals))
       .send({
-        from: this.web3.eth.defaultAccount,
+        from: this.useMetamask ? accounts[0] : this.web3.eth.defaultAccount,
         gas: this.gasLimit,
         gasPrice: new BN(await this.web3.eth.getGasPrice()).mul(new BN(1)),
       })
@@ -58,12 +67,18 @@ export class EthMethodsERC20 {
     decimals: number,
     sendTxCallback?: (hash: string) => void
   ) => {
+    let accounts;
+    if (this.useMetamask) {
+      // @ts-ignore
+      accounts = await ethereum.enable();
+    }
+
     const hmyAddrHex = getAddress(userAddr).checksum;
 
     const transaction = await this.ethManagerContract.methods
       .lockToken(erc20Address, withDecimals(amount, decimals), hmyAddrHex)
       .send({
-        from: this.web3.eth.defaultAccount,
+        from: this.useMetamask ? accounts[0] : this.web3.eth.defaultAccount,
         gas: this.gasLimit,
         gasPrice: new BN(await this.web3.eth.getGasPrice()).mul(new BN(1)),
       })

@@ -16,6 +16,8 @@ export interface IHmyClient {
   getBech32Address: (addr: string) => string;
   addWallet: (pk: string) => void;
   getUserAddress: () => string;
+  setUseOneWallet: (value: boolean) => void;
+  setUseMathWallet: (value: boolean) => void;
 }
 
 export interface IHmyClientParams {
@@ -96,5 +98,15 @@ export const getHmyClient = async (params: IHmyClientParams): Promise<IHmyClient
     hmyMethodsERC20,
     getBech32Address: address => hmy.crypto.getAddress(address).bech32,
     getHmyBalance: address => hmy.blockchain.getBalance({ address }),
+    setUseOneWallet: (value: boolean) => {
+      hmyMethodsBUSD.setUseOneWallet(value);
+      hmyMethodsLINK.setUseOneWallet(value);
+      hmyMethodsERC20.setUseOneWallet(value);
+    },
+    setUseMathWallet: (value: boolean) => {
+      hmyMethodsBUSD.setUseMathWallet(value);
+      hmyMethodsLINK.setUseMathWallet(value);
+      hmyMethodsERC20.setUseMathWallet(value);
+    },
   };
 };

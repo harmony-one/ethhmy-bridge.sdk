@@ -1,6 +1,7 @@
 import { Harmony } from '@harmony-js/core';
 import { Contract } from '@harmony-js/contract';
 import { withDecimals } from '../utils';
+import { connectToBrowserWallet } from './helpers';
 
 interface IHmyMethodsInitParams {
   hmy: Harmony;
@@ -14,6 +15,8 @@ export class HmyMethods {
   private hmyTokenContract: Contract;
   private hmyManagerContract: Contract;
   private options = { gasPrice: 1000000000, gasLimit: 6721900 };
+  private useOneWallet = false;
+  private useMathWallet = false;
 
   constructor(params: IHmyMethodsInitParams) {
     this.hmy = params.hmy;
@@ -25,10 +28,48 @@ export class HmyMethods {
     }
   }
 
+  setUseOneWallet = (value: boolean) => {
+    // @ts-ignore
+    if (!window || !window.onewallet) {
+      throw new Error('OneWallet extension is not found');
+    }
+
+    this.useOneWallet = value;
+  };
+
+  setUseMathWallet = (value: boolean) => {
+    // @ts-ignore
+    if (!window || !window.harmony) {
+      throw new Error('Math Wallet extension is not found');
+    }
+
+    this.useMathWallet = value;
+  };
+
   approveHmyManger = (amount: number, sendTxCallback?: (hash: string) => void) => {
     return new Promise(async (resolve, reject) => {
       try {
-        // await connectToOneWallet(this.hmyTokenContract.wallet, null, reject);
+        if (this.useOneWallet) {
+          await connectToBrowserWallet(
+            // @ts-ignore
+            window.onewallet,
+            this.hmy,
+            this.hmyTokenContract.wallet,
+            null,
+            reject
+          );
+        }
+
+        if (this.useMathWallet) {
+          await connectToBrowserWallet(
+            // @ts-ignore
+            window.harmony,
+            this.hmy,
+            this.hmyTokenContract.wallet,
+            null,
+            reject
+          );
+        }
 
         const res: any = await this.hmyTokenContract.methods
           .approve(this.hmyManagerContract.address, withDecimals(amount, 18))
@@ -45,7 +86,27 @@ export class HmyMethods {
   burnToken = async (userAddr: string, amount: number, sendTxCallback?: (hash: string) => void) => {
     return new Promise(async (resolve, reject) => {
       try {
-        // await connectToOneWallet(this.hmyManagerContract.wallet, null, reject);
+        if (this.useOneWallet) {
+          await connectToBrowserWallet(
+            // @ts-ignore
+            window.onewallet,
+            this.hmy,
+            this.hmyManagerContract.wallet,
+            null,
+            reject
+          );
+        }
+
+        if (this.useMathWallet) {
+          await connectToBrowserWallet(
+            // @ts-ignore
+            window.harmony,
+            this.hmy,
+            this.hmyManagerContract.wallet,
+            null,
+            reject
+          );
+        }
 
         const response = await this.hmyManagerContract.methods
           .burnToken(withDecimals(amount, 18), userAddr)

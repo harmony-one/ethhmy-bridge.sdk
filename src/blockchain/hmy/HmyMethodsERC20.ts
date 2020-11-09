@@ -2,6 +2,7 @@ import { Harmony } from '@harmony-js/core';
 import { Contract } from '@harmony-js/contract';
 import { withDecimals } from '../utils';
 import MyERC20Abi from '../out/MyERC20';
+import { connectToBrowserWallet } from './helpers';
 
 interface IHmyMethodsInitParams {
   hmy: Harmony;
@@ -14,6 +15,9 @@ export class HmyMethodsERC20 {
   private hmyManagerContract: Contract;
   private options = { gasPrice: 1000000000, gasLimit: 6721900 };
 
+  private useOneWallet = false;
+  private useMathWallet = false;
+
   constructor(params: IHmyMethodsInitParams) {
     this.hmy = params.hmy;
     this.hmyManagerContract = params.hmyManagerContract;
@@ -22,6 +26,24 @@ export class HmyMethodsERC20 {
       this.options = params.options;
     }
   }
+
+  setUseOneWallet = (value: boolean) => {
+    // @ts-ignore
+    if (!window || !window.onewallet) {
+      throw new Error('OneWallet extension is not found');
+    }
+
+    this.useOneWallet = value;
+  };
+
+  setUseMathWallet = (value: boolean) => {
+    // @ts-ignore
+    if (!window || !window.harmony) {
+      throw new Error('Math Wallet extension is not found');
+    }
+
+    this.useMathWallet = value;
+  };
 
   approveHmyManger = (
     hrc20Address: string,
@@ -34,8 +56,27 @@ export class HmyMethodsERC20 {
 
     return new Promise(async (resolve, reject) => {
       try {
-        // TODO
-        // await connectToOneWallet(hmyTokenContract.wallet, null, reject);
+        if (this.useOneWallet) {
+          await connectToBrowserWallet(
+            // @ts-ignore
+            window.onewallet,
+            this.hmy,
+            hmyTokenContract.wallet,
+            null,
+            reject
+          );
+        }
+
+        if (this.useMathWallet) {
+          await connectToBrowserWallet(
+            // @ts-ignore
+            window.harmony,
+            this.hmy,
+            hmyTokenContract.wallet,
+            null,
+            reject
+          );
+        }
 
         const res = await hmyTokenContract.methods
           .approve(this.hmyManagerContract.address, withDecimals(amount, decimals))
@@ -58,7 +99,27 @@ export class HmyMethodsERC20 {
   ) => {
     return new Promise(async (resolve, reject) => {
       try {
-        // await connectToOneWallet(this.hmyManagerContract.wallet, null, reject);
+        if (this.useOneWallet) {
+          await connectToBrowserWallet(
+            // @ts-ignore
+            window.onewallet,
+            this.hmy,
+            this.hmyManagerContract.wallet,
+            null,
+            reject
+          );
+        }
+
+        if (this.useMathWallet) {
+          await connectToBrowserWallet(
+            // @ts-ignore
+            window.harmony,
+            this.hmy,
+            this.hmyManagerContract.wallet,
+            null,
+            reject
+          );
+        }
 
         const response = await this.hmyManagerContract.methods
           .burnToken(hrc20Address, withDecimals(amount, decimals), userAddr)

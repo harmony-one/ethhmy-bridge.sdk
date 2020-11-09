@@ -2,18 +2,24 @@ import { Wallet } from '@harmony-js/account';
 import { Harmony } from '@harmony-js/core';
 
 export type TConnectToOneWallet = (
+  walletExtension: any,
   hmy: Harmony,
   wallet: Wallet | any,
   addr: string,
   reject: (reason: string) => void
 ) => Promise<any>;
 
-export const connectToOneWallet: TConnectToOneWallet = async (hmy, wallet, addrHex, reject) => {
+export const connectToBrowserWallet: TConnectToOneWallet = async (
+  walletExtension,
+  hmy,
+  wallet,
+  addrHex,
+  reject
+) => {
   let userAddress = addrHex;
 
   if (!userAddress) {
-    // @ts-ignore
-    let { address } = await window.onewallet.getAccount();
+    let { address } = await walletExtension.getAccount();
 
     userAddress = hmy.crypto.getAddress(address).checksum;
   }
@@ -24,8 +30,7 @@ export const connectToOneWallet: TConnectToOneWallet = async (hmy, wallet, addrH
     try {
       tx.from = userAddress;
 
-      // @ts-ignore
-      const signTx = await window.onewallet.signTransaction(tx);
+      const signTx = await walletExtension.signTransaction(tx);
 
       return signTx;
     } catch (e) {
