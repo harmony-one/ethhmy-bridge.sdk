@@ -1,4 +1,18 @@
-import signale from 'signale';
+const logFunc = ({ prefix = '', message }: { prefix?: string; message: string }) =>
+  console.log(prefix, message);
+
+let signale = {
+  error: logFunc,
+  start: logFunc,
+  success: logFunc,
+  await: logFunc,
+  info: logFunc,
+  pending: logFunc,
+};
+
+if (!window) {
+  signale = require('signale');
+}
 
 const context: any = this;
 
