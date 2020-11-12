@@ -2,7 +2,7 @@ const { BridgeSDK } = require('..');
 const configs = require('../lib/configs');
 
 const operationCall = async () => {
-  const bridgeSDK = new BridgeSDK();
+  const bridgeSDK = new BridgeSDK({ logLevel: 0 });
 
   await bridgeSDK.init(configs.testnet);
 
@@ -16,6 +16,10 @@ const operationCall = async () => {
   const operation = await bridgeSDK.api.getOperation(operationId);
 
   console.log('Operation details: ', operation);
+
+  const tokens = await bridgeSDK.api.getTokensInfo();
+
+  console.log('Tokens', tokens);
 };
 
 operationCall();

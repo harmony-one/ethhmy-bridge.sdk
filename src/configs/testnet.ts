@@ -5,7 +5,7 @@ const api = {
     'https://testnet.bridge.hmny.io:8083',
   ],
   threshold: 2, // minimum validators number to do operation
-  assetServiceUrl: 'https://testnet.bridge.hmny.io:8083', // assets statistic service
+  assetServiceUrl: 'https://testnet.bridge.hmny.io:8084', // assets statistic service
 };
 
 const ethClient = {

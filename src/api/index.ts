@@ -35,6 +35,7 @@ export class ValidatorsAPI {
 
   constructor(params: IAPIParams) {
     this.servers = params.validators || [];
+    this.assetServiceUrl = params.assetServiceUrl || '';
     this.threshold = params.threshold || 2;
   }
 
