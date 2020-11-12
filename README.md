@@ -60,6 +60,8 @@ full example here https://github.com/harmony-one/ethhmy-bridge.sdk/blob/main/exa
 bridgeSDK.setUseMathWallet(true);
 ```
 
+If you want to do operations in both directions (eth <> one) - you need to set both wallet (Metamask + OneWallet).
+
 ### 3. Send tokens
 ```js
 let oprationId;
