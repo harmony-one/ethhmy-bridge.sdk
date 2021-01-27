@@ -2,8 +2,12 @@ require('dotenv').config();
 const Web3 = require('web3');
 const BN = require('bn.js');
 
-const HMY_RPC_URL = 'https://api.s0.b.hmny.io';
-const HMY_PRIVATE_KEY = '';
+const HMY_RPC_URL = process.env.HMY_RPC_URL;
+const HMY_PRIVATE_KEY = process.env.HMY_PRIVATE_KEY;
+
+/*
+  This example demonstrates how you can send transaction, using web3.eth
+ */
 
 GAS_LIMIT = 6721900;
 GAS_PRICE = 1000000000;
