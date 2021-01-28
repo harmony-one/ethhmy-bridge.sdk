@@ -13,7 +13,7 @@ interface IHmyMethodsInitParams {
 }
 
 export class HmyMethodsWeb3 {
-  private hmy: Web3;
+  private web3: Web3;
   private hmyTokenContract: Contract;
   private hmyManagerContract: Contract;
   private hmyManagerContractAddress: string;
@@ -21,7 +21,7 @@ export class HmyMethodsWeb3 {
   private useMetamask = false;
 
   constructor(params: IHmyMethodsInitParams) {
-    this.hmy = params.hmy;
+    this.web3 = params.hmy;
     this.hmyTokenContract = params.hmyTokenContract;
     this.hmyManagerContract = params.hmyManagerContract;
     this.hmyManagerContractAddress = params.hmyManagerContractAddress;
@@ -46,9 +46,9 @@ export class HmyMethodsWeb3 {
     const transaction = await this.hmyTokenContract.methods
       .approve(this.hmyManagerContractAddress, withDecimals(amount, 18))
       .send({
-        from: this.useMetamask ? accounts[0] : this.hmy.eth.defaultAccount,
+        from: this.useMetamask ? accounts[0] : this.web3.eth.defaultAccount,
         gasLimit: 6721900,
-        gasPrice: new BN(await this.hmy.eth.getGasPrice()).mul(new BN(1)),
+        gasPrice: new BN(await this.web3.eth.getGasPrice()).mul(new BN(1)),
       })
       .on('transactionHash', sendTxCallback);
 
@@ -67,9 +67,9 @@ export class HmyMethodsWeb3 {
     const transaction = await this.hmyManagerContract.methods
       .burnToken(withDecimals(amount, 18), userAddrHex)
       .send({
-        from: this.useMetamask ? accounts[0] : this.hmy.eth.defaultAccount,
+        from: this.useMetamask ? accounts[0] : this.web3.eth.defaultAccount,
         gasLimit: 6721900,
-        gasPrice: new BN(await this.hmy.eth.getGasPrice()).mul(new BN(1)),
+        gasPrice: new BN(await this.web3.eth.getGasPrice()).mul(new BN(1)),
       })
       .on('transactionHash', sendTxCallback);
 
