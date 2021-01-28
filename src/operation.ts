@@ -8,7 +8,7 @@ import { oneToEth } from './operations/oneToEth';
 import { oneToEthErc20 } from './operations/oneToEthErc20';
 import { ethToOneErc20 } from './operations/ethToOneErc20';
 import { ValidatorsAPI } from './api';
-import { HmyMethods } from './blockchain/hmy/HmyMethods';
+import { HmyMethodsCommon } from './blockchain/hmy';
 import { EthMethods } from './blockchain/eth/EthMethods';
 
 export const operation = async (
@@ -79,7 +79,7 @@ export const operation = async (
     logger.success({ prefix, message: 'create operation' });
     logger.info({ prefix, message: 'operation ID: ' + operation.id });
 
-    let ethMethods: EthMethods, hmyMethods: HmyMethods;
+    let ethMethods: EthMethods, hmyMethods: HmyMethodsCommon;
 
     switch (token) {
       case TOKEN.BUSD:

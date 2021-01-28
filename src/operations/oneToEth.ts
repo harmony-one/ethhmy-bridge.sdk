@@ -2,14 +2,14 @@ import { ACTION_TYPE, IOperation, STATUS } from '../interfaces';
 import { logger } from '../utils/logs';
 import { checkStatus, confirmCallback, getActionByType, waitAction } from '../operation-helpers';
 import { EthMethods } from '../blockchain/eth/EthMethods';
-import { HmyMethods } from '../blockchain/hmy/HmyMethods';
+import { HmyMethodsCommon } from '../blockchain/hmy';
 import { ValidatorsAPI } from '../api';
 
 export const oneToEth = async (
   api: ValidatorsAPI,
   operationParams: IOperation,
   ethMethods: EthMethods,
-  hmyMethods: HmyMethods,
+  hmyMethods: HmyMethodsCommon,
   prefix: string,
   maxWaitingTime: number
 ) => {

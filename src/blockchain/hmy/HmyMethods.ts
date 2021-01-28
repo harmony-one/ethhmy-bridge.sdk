@@ -28,6 +28,8 @@ export class HmyMethods {
     }
   }
 
+  setUseMetamask = (value: boolean) => value;
+
   setUseOneWallet = (value: boolean) => {
     // @ts-ignore
     if (!window || !window.onewallet) {

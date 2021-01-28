@@ -3,14 +3,14 @@ import { logger } from '../utils/logs';
 import { checkStatus, confirmCallback, getActionByType, waitAction } from '../operation-helpers';
 import { sleep } from '../utils';
 import { EthMethodsERC20 } from '../blockchain/eth/EthMethodsERC20';
-import { HmyMethodsERC20 } from '../blockchain/hmy/HmyMethodsERC20';
+import { HmyMethodsErc20Common } from '../blockchain/hmy';
 import { ValidatorsAPI } from '../api';
 
 export const oneToEthErc20 = async (
   api: ValidatorsAPI,
   operationParams: IOperation,
   ethMethods: EthMethodsERC20,
-  hmyMethods: HmyMethodsERC20,
+  hmyMethods: HmyMethodsErc20Common,
   prefix: string,
   maxWaitingTime: number
 ) => {

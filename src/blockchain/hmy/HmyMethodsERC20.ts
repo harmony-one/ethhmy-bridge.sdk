@@ -27,6 +27,8 @@ export class HmyMethodsERC20 {
     }
   }
 
+  setUseMetamask = (value: boolean) => value;
+
   setUseOneWallet = (value: boolean) => {
     // @ts-ignore
     if (!window || !window.onewallet) {
