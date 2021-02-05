@@ -10,6 +10,10 @@ export enum TOKEN {
 }
 
 export enum ACTION_TYPE {
+  // ALL
+  'depositOne' = 'depositOne',
+  'withdrawOne' = 'withdrawOne',
+
   // ETH_TO_ONE
   'getHRC20Address' = 'getHRC20Address',
   'approveEthManger' = 'approveEthManger',
@@ -24,6 +28,17 @@ export enum ACTION_TYPE {
   'waitingBlockNumberHarmony' = 'waitingBlockNumberHarmony',
   'unlockToken' = 'unlockToken',
   'unlockTokenRollback' = 'unlockTokenRollback',
+
+  // HRC20
+  'approveHRC20HmyManger' = 'approveHRC20HmyManger',
+  'approveHRC20EthManger' = 'approveHRC20EthManger',
+  'getERC20Address' = 'getERC20Address',
+  'lockHRC20Token' = 'lockHRC20Token',
+  'unlockHRC20Token' = 'unlockHRC20Token',
+  'burnHRC20Token' = 'burnHRC20Token',
+  'mintHRC20Token' = 'mintHRC20Token',
+  'unlockHRC20TokenRollback' = 'unlockHRC20TokenRollback',
+  'mintHRC20TokenRollback' = 'mintHRC20TokenRollback',
 }
 
 export enum STATUS {
@@ -42,6 +57,7 @@ export interface IAction {
   message: string;
   timestamp: number;
   payload: any;
+  depositAmount?: number;
 }
 
 export interface IOperation {

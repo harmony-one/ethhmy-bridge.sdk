@@ -30,6 +30,7 @@ const hmyClient = {
     busdManager: '0xdc7c9eac2065d683adbe286b54bab4a62baa2654',
     linkManager: '0x32b473d012bea1a7b54df2fa4d9451fc2e37d5e9',
     erc20Manager: '0x97a5455c765c55b6d37eb87ee6bb1205cbf0c570',
+    depositManager: '0xce3110e4ab757672b0535a9c1410fed80647b693',
   },
 };
 

@@ -13,12 +13,12 @@ interface IHmyMethodsInitParams {
 }
 
 export class HmyMethodsWeb3 {
-  private web3: Web3;
-  private hmyTokenContract: Contract;
-  private hmyManagerContract: Contract;
-  private hmyManagerContractAddress: string;
+  public web3: Web3;
+  public hmyTokenContract: Contract;
+  public hmyManagerContract: Contract;
+  public hmyManagerContractAddress: string;
   // private options = { gasPrice: 1000000000, gasLimit: 6721900 };
-  private useMetamask = false;
+  public useMetamask = false;
 
   constructor(params: IHmyMethodsInitParams) {
     this.web3 = params.hmy;

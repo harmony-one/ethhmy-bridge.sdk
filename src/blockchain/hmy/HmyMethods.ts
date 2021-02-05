@@ -11,12 +11,12 @@ interface IHmyMethodsInitParams {
 }
 
 export class HmyMethods {
-  private hmy: Harmony;
-  private hmyTokenContract: Contract;
-  private hmyManagerContract: Contract;
-  private options = { gasPrice: 1000000000, gasLimit: 6721900 };
-  private useOneWallet = false;
-  private useMathWallet = false;
+  public hmy: Harmony;
+  public hmyTokenContract: Contract;
+  public hmyManagerContract: Contract;
+  public options = { gasPrice: 1000000000, gasLimit: 6721900 };
+  public useOneWallet = false;
+  public useMathWallet = false;
 
   constructor(params: IHmyMethodsInitParams) {
     this.hmy = params.hmy;

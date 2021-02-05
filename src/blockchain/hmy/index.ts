@@ -9,13 +9,18 @@ const { ChainType } = require('@harmony-js/utils');
 import hmyLINKAbi from '../out/MyERC20';
 import hmyLINKManagerAbi from '../out/LINKHmyManager';
 import hmyManagerAbi from '../out/HmyManagerERC20';
+import hmyDepositAbi from '../out/HmyDeposit';
+import { HmyMethodsDepositWeb3 } from './HmyMethodsDepositWeb3';
+import { HmyMethodsDeposit } from './HmyMethodsDeposit';
 
 export type HmyMethodsCommon = HmyMethods | HmyMethodsWeb3;
+export type HmyMethodsDepositCommon = HmyMethodsDeposit | HmyMethodsDepositWeb3;
 export type HmyMethodsErc20Common = HmyMethodsERC20 | HmyMethodsERC20Web3;
 
 export interface IHmyClient {
   hmyMethodsBUSD: HmyMethodsCommon;
   hmyMethodsLINK: HmyMethodsCommon;
+  hmyMethodsDeposit: HmyMethodsDepositCommon;
   hmyMethodsERC20: HmyMethodsErc20Common;
   getHmyBalance: (addr: string) => Promise<string>;
   getBech32Address: (addr: string) => string;
@@ -35,6 +40,7 @@ export interface IHmyClientParams {
     busdManager: string;
     linkManager: string;
     erc20Manager: string;
+    depositManager: string;
   };
   gasLimit?: number;
   gasPrice?: number;
@@ -61,7 +67,8 @@ export const getHmyClient = async (params: IHmyClientParams): Promise<IHmyClient
 
   let hmyMethodsLINK: HmyMethodsCommon,
     hmyMethodsBUSD: HmyMethodsCommon,
-    hmyMethodsERC20: HmyMethodsErc20Common;
+    hmyMethodsERC20: HmyMethodsErc20Common,
+    hmyMethodsDeposit: HmyMethodsDepositCommon;
 
   const web3 = new Web3(params.nodeURL);
 
@@ -75,6 +82,15 @@ export const getHmyClient = async (params: IHmyClientParams): Promise<IHmyClient
     const hmyLINKManagerContract = new web3.eth.Contract(hmyLINKManagerAbi, contracts.linkManager);
 
     const hmyManagerContract = new web3.eth.Contract(hmyManagerAbi, contracts.erc20Manager);
+
+    const hmyDepositContract = new web3.eth.Contract(hmyDepositAbi, contracts.depositManager);
+
+    hmyMethodsDeposit = new HmyMethodsDepositWeb3({
+      hmy: web3,
+      hmyTokenContract: hmyBUSDContract,
+      hmyManagerContract: hmyDepositContract,
+      hmyManagerContractAddress: contracts.depositManager,
+    });
 
     hmyMethodsBUSD = new HmyMethodsWeb3({
       hmy: web3,
@@ -96,6 +112,11 @@ export const getHmyClient = async (params: IHmyClientParams): Promise<IHmyClient
       hmyManagerContractAddress: contracts.erc20Manager,
     });
   } else {
+    const hmyDepositContract = hmy.contracts.createContract(
+      hmyDepositAbi,
+      contracts.depositManager
+    );
+
     const hmyBUSDContract = hmy.contracts.createContract(hmyLINKAbi, contracts.busd);
 
     const hmyBUSDManagerContract = hmy.contracts.createContract(
@@ -116,6 +137,12 @@ export const getHmyClient = async (params: IHmyClientParams): Promise<IHmyClient
       hmy: hmy,
       hmyTokenContract: hmyBUSDContract,
       hmyManagerContract: hmyBUSDManagerContract,
+    });
+
+    hmyMethodsDeposit = new HmyMethodsDeposit({
+      hmy: hmy,
+      hmyTokenContract: hmyBUSDContract,
+      hmyManagerContract: hmyDepositContract,
     });
 
     hmyMethodsLINK = new HmyMethods({
@@ -147,6 +174,7 @@ export const getHmyClient = async (params: IHmyClientParams): Promise<IHmyClient
     hmyMethodsBUSD,
     hmyMethodsLINK,
     hmyMethodsERC20,
+    hmyMethodsDeposit,
     getBech32Address: address => hmy.crypto.getAddress(address).bech32,
     getHmyBalance: address => hmy.blockchain.getBalance({ address }),
     setUseOneWallet: (value: boolean) => {

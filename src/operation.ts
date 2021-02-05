@@ -10,6 +10,7 @@ import { ethToOneErc20 } from './operations/ethToOneErc20';
 import { ValidatorsAPI } from './api';
 import { HmyMethodsCommon } from './blockchain/hmy';
 import { EthMethods } from './blockchain/eth/EthMethods';
+import { depositOne } from './operations/oneDeposit';
 
 export const operation = async (
   params: {
@@ -80,6 +81,10 @@ export const operation = async (
     logger.info({ prefix, message: 'operation ID: ' + operation.id });
 
     let ethMethods: EthMethods, hmyMethods: HmyMethodsCommon;
+
+    if (type === EXCHANGE_MODE.ONE_TO_ETH) {
+      await depositOne(api, operation, ethMethods, hmyClient.hmyMethodsDeposit, prefix);
+    }
 
     switch (token) {
       case TOKEN.BUSD:
