@@ -11,6 +11,7 @@ import { ValidatorsAPI } from './api';
 import { HmyMethodsCommon } from './blockchain/hmy';
 import { EthMethods } from './blockchain/eth/EthMethods';
 import { depositOne } from './operations/oneDeposit';
+import { ethToOneErc721 } from './operations/ethToOneErc721';
 
 export const operation = async (
   params: {
@@ -121,7 +122,33 @@ export const operation = async (
           maxWaitingTime
         );
       }
-    } else {
+    }
+
+    if (token === TOKEN.ERC721) {
+      if (type === EXCHANGE_MODE.ETH_TO_ONE) {
+        res = await ethToOneErc721(
+          api,
+          operation,
+          web3Client.ethMethodsERС721,
+          hmyClient.hmyMethodsERC20,
+          prefix,
+          maxWaitingTime
+        );
+      }
+
+      if (type === EXCHANGE_MODE.ONE_TO_ETH) {
+        res = await oneToEthErc20(
+          api,
+          operation,
+          web3Client.ethMethodsERC20,
+          hmyClient.hmyMethodsERC20,
+          prefix,
+          maxWaitingTime
+        );
+      }
+    }
+
+    if ([TOKEN.BUSD, TOKEN.LINK].includes(token)) {
       if (type === EXCHANGE_MODE.ETH_TO_ONE) {
         res = await ethToOne(api, operation, ethMethods, prefix, maxWaitingTime);
       }

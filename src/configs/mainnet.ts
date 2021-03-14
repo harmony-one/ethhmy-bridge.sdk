@@ -16,6 +16,7 @@ const ethClient = {
     busdManager: '0xfD53b1B4AF84D59B20bF2C20CA89a6BeeAa2c628',
     linkManager: '0xfE601dE9D4295274b9904D5a9Ad7069F23eE2B32',
     erc20Manager: '0x2dCCDB493827E15a5dC8f8b72147E6c4A5620857',
+    erc721Manager: '0x426A61A2127fDD1318Ec0EdCe02474f382FdAd30',
   },
   gasPrice: 100000000000,
   gasLimit: 150000,
@@ -30,6 +31,7 @@ const hmyClient = {
     busdManager: '0x05d11b7082d5634e0318d818a2f0cd381b371ea5',
     linkManager: '0xc0c7b147910ef11f6454dc1918ecde9a2b64a3a8',
     erc20Manager: '0x2fbbcef71544c461edfc311f42e3583d5f9675d1',
+    erc721Manager: '0x39ec213272dda1f46424726bb20d82c3861568c0',
     depositManager: '0xce3110e4ab757672b0535a9c1410fed80647b693',
   },
 };

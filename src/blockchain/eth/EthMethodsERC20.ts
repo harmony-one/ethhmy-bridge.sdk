@@ -106,4 +106,84 @@ export class EthMethodsERC20 {
 
     return { name, symbol, decimals, erc20Address };
   };
+
+  setApprovalForAllEthManger = async (
+    erc20Address: string,
+    sendTxCallback?: (hash: string) => void
+  ) => {
+    let accounts;
+    if (this.useMetamask) {
+      // @ts-ignore
+      accounts = await ethereum.enable();
+    }
+    // @ts-ignore
+    const erc20Contract = new this.web3.eth.Contract(MyERC20Abi, erc20Address);
+
+    const res = await erc20Contract.methods
+      .isApprovedForAll(
+        this.useMetamask ? accounts[0] : this.web3.eth.defaultAccount,
+        this.ethManagerAddress
+      )
+      .call();
+
+    if (!res) {
+      return await erc20Contract.methods
+        .setApprovalForAll(this.ethManagerAddress, true)
+        .send({
+          from: this.useMetamask ? accounts[0] : this.web3.eth.defaultAccount,
+          gas: this.gasLimit,
+          gasPrice: new BN(await this.web3.eth.getGasPrice()).mul(new BN(1)),
+        })
+        .on('transactionHash', (hash: string) => sendTxCallback(hash));
+    } else {
+      sendTxCallback('skip');
+    }
+  };
+
+  lockTokens = async (
+    erc20Address: string,
+    userAddr: string,
+    amount: number | number[],
+    sendTxCallback?: (hash: string) => void
+  ) => {
+    let accounts;
+    if (this.useMetamask) {
+      // @ts-ignore
+      accounts = await ethereum.enable();
+    }
+
+    const hmyAddrHex = getAddress(userAddr).checksum;
+
+    const estimateGas = await this.ethManagerContract.methods
+      .lockTokens(erc20Address, amount, hmyAddrHex)
+      .estimateGas({ from: this.useMetamask ? accounts[0] : this.web3.eth.defaultAccount });
+
+    const gasLimit = Math.max(estimateGas + estimateGas * 0.3, Number(this.gasLimit));
+
+    const transaction = await this.ethManagerContract.methods
+      .lockTokens(erc20Address, amount, hmyAddrHex)
+      .send({
+        from: this.useMetamask ? accounts[0] : this.web3.eth.defaultAccount,
+        gas: gasLimit.toFixed(0),
+        gasPrice: new BN(await this.web3.eth.getGasPrice()).mul(new BN(1)),
+      })
+      .on('transactionHash', (hash: string) => sendTxCallback(hash));
+
+    return transaction;
+  };
+
+  tokenDetailsERC721 = async (erc20Address: string) => {
+    if (!this.web3.utils.isAddress(erc20Address)) {
+      throw new Error('Invalid token address');
+    }
+
+    // @ts-ignore
+    const erc20Contract = new this.web3.eth.Contract(MyERC20Abi, erc20Address);
+
+    const name = await erc20Contract.methods.name().call();
+    const symbol = await erc20Contract.methods.symbol().call();
+    // const decimals = await erc20Contract.methods.decimals().call();
+
+    return { name, symbol, erc20Address };
+  };
 }
