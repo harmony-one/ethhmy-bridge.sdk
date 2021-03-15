@@ -105,4 +105,68 @@ export class HmyMethodsERC20Web3 {
 
     return await hmyTokenContract.methods.totalSupply().call();
   };
+
+  setApprovalForAll = async (hrc20Address: string, sendTxCallback?: (hash: string) => void) => {
+    const hmyTokenContract = new this.hmy.eth.Contract(MyERC20Abi, hrc20Address);
+
+    let accounts;
+    if (this.useMetamask) {
+      // @ts-ignore
+      accounts = await ethereum.enable();
+    }
+
+    let res = await hmyTokenContract.methods
+      .isApprovedForAll(
+        this.useMetamask ? accounts[0] : this.hmy.eth.defaultAccount,
+        this.hmyManagerContractAddress
+      )
+      .call({
+        from: this.useMetamask ? accounts[0] : this.hmy.eth.defaultAccount,
+        gasLimit: 6721900,
+        gasPrice: new BN(await this.hmy.eth.getGasPrice()).mul(new BN(1)),
+      });
+
+    if (!res) {
+      res = await hmyTokenContract.methods
+        .setApprovalForAll(this.hmyManagerContractAddress, true)
+        .send({
+          from: this.useMetamask ? accounts[0] : this.hmy.eth.defaultAccount,
+          gasLimit: 6721900,
+          gasPrice: new BN(await this.hmy.eth.getGasPrice()).mul(new BN(1)),
+        })
+        .on('transactionHash', sendTxCallback);
+
+      return res;
+    } else {
+      sendTxCallback('skip');
+      return res;
+    }
+  };
+
+  burnTokens = async (
+    hrc20Address: string,
+    userAddr: string,
+    amount: number | number[],
+    sendTxCallback?: (hash: string) => void
+  ) => {
+    let accounts;
+
+    if (this.useMetamask) {
+      // @ts-ignore
+      accounts = await ethereum.enable();
+    }
+
+    const userAddrHex = getAddress(userAddr).checksum;
+
+    const response = await this.hmyManagerContract.methods
+      .burnTokens(hrc20Address, amount, userAddrHex)
+      .send({
+        from: this.useMetamask ? accounts[0] : this.hmy.eth.defaultAccount,
+        gasLimit: 6721900,
+        gasPrice: new BN(await this.hmy.eth.getGasPrice()).mul(new BN(1)),
+      })
+      .on('transactionHash', sendTxCallback);
+
+    return response;
+  };
 }

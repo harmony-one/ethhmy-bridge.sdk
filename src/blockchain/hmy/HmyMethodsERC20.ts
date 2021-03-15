@@ -153,4 +153,111 @@ export class HmyMethodsERC20 {
 
     return await hmyTokenContract.methods.totalSupply().call(this.options);
   };
+
+  setApprovalForAll = (hrc20Address: string, sendTxCallback?: (hash: string) => void) => {
+    const hmyTokenContract = this.hmy.contracts.createContract(MyERC20Abi, hrc20Address);
+
+    return new Promise(async (resolve, reject) => {
+      try {
+        let hmyAddrHex;
+
+        if (this.useOneWallet) {
+          await connectToBrowserWallet(
+            // @ts-ignore
+            window.onewallet,
+            this.hmy,
+            this.hmyManagerContract.wallet,
+            null,
+            reject
+          );
+
+          // @ts-ignore
+          const { address } = await window.onewallet.getAccount();
+          hmyAddrHex = this.hmy.crypto.getAddress(address).checksum;
+        }
+
+        if (this.useMathWallet) {
+          await connectToBrowserWallet(
+            // @ts-ignore
+            window.harmony,
+            this.hmy,
+            this.hmyManagerContract.wallet,
+            null,
+            reject
+          );
+
+          // @ts-ignore
+          const { address } = await window.onewallet.getAccount();
+          hmyAddrHex = this.hmy.crypto.getAddress(address).checksum;
+        }
+
+        if (!this.useMathWallet && !this.useOneWallet) {
+          const address = this.hmy.wallet.accounts[0];
+          hmyAddrHex = this.hmy.crypto.getAddress(address).checksum;
+        }
+
+        let res = await hmyTokenContract.methods
+          .isApprovedForAll(hmyAddrHex, this.hmyManagerContract.address)
+          .call(this.options);
+
+        if (!res) {
+          res = await hmyTokenContract.methods
+            .setApprovalForAll(this.hmyManagerContract.address, true)
+            .send(this.options)
+            .on('transactionHash', sendTxCallback);
+
+          resolve(res);
+        } else {
+          sendTxCallback('skip');
+          resolve(res);
+        }
+      } catch (e) {
+        reject(e);
+      }
+    });
+  };
+
+  burnTokens = async (
+    hrc20Address: string,
+    userAddr: string,
+    amount: number | number[],
+    sendTxCallback?: (hash: string) => void
+  ) => {
+    return new Promise(async (resolve, reject) => {
+      try {
+        if (this.useOneWallet) {
+          await connectToBrowserWallet(
+            // @ts-ignore
+            window.onewallet,
+            this.hmy,
+            this.hmyManagerContract.wallet,
+            null,
+            reject
+          );
+        }
+
+        if (this.useMathWallet) {
+          await connectToBrowserWallet(
+            // @ts-ignore
+            window.harmony,
+            this.hmy,
+            this.hmyManagerContract.wallet,
+            null,
+            reject
+          );
+        }
+
+        const userAddrHex = this.hmy.crypto.getAddress(userAddr).checksum;
+
+        const response = await this.hmyManagerContract.methods
+          .burnTokens(hrc20Address, amount, userAddrHex)
+          .send(this.options)
+          .on('transactionHash', sendTxCallback);
+
+        resolve(response);
+      } catch (e) {
+        reject(e);
+      }
+    });
+  };
 }

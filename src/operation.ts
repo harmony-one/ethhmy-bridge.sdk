@@ -12,6 +12,7 @@ import { HmyMethodsCommon } from './blockchain/hmy';
 import { EthMethods } from './blockchain/eth/EthMethods';
 import { depositOne } from './operations/oneDeposit';
 import { ethToOneErc721 } from './operations/ethToOneErc721';
+import { oneToEthErc721 } from './operations/oneToEthErc721';
 
 export const operation = async (
   params: {
@@ -137,11 +138,11 @@ export const operation = async (
       }
 
       if (type === EXCHANGE_MODE.ONE_TO_ETH) {
-        res = await oneToEthErc20(
+        res = await oneToEthErc721(
           api,
           operation,
-          web3Client.ethMethodsERC20,
-          hmyClient.hmyMethodsERC20,
+          web3Client.ethMethodsERС721,
+          hmyClient.hmyMethodsERC721,
           prefix,
           maxWaitingTime
         );
