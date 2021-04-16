@@ -8,8 +8,11 @@ import { oneToEth } from './operations/oneToEth';
 import { oneToEthErc20 } from './operations/oneToEthErc20';
 import { ethToOneErc20 } from './operations/ethToOneErc20';
 import { ValidatorsAPI } from './api';
-import { HmyMethods } from './blockchain/hmy/HmyMethods';
+import { HmyMethodsCommon } from './blockchain/hmy';
 import { EthMethods } from './blockchain/eth/EthMethods';
+import { depositOne } from './operations/oneDeposit';
+import { ethToOneErc721 } from './operations/ethToOneErc721';
+import { oneToEthErc721 } from './operations/oneToEthErc721';
 
 export const operation = async (
   params: {
@@ -79,7 +82,11 @@ export const operation = async (
     logger.success({ prefix, message: 'create operation' });
     logger.info({ prefix, message: 'operation ID: ' + operation.id });
 
-    let ethMethods: EthMethods, hmyMethods: HmyMethods;
+    let ethMethods: EthMethods, hmyMethods: HmyMethodsCommon;
+
+    if (type === EXCHANGE_MODE.ONE_TO_ETH) {
+      await depositOne(api, operation, ethMethods, hmyClient.hmyMethodsDeposit, prefix);
+    }
 
     switch (token) {
       case TOKEN.BUSD:
@@ -116,7 +123,33 @@ export const operation = async (
           maxWaitingTime
         );
       }
-    } else {
+    }
+
+    if (token === TOKEN.ERC721) {
+      if (type === EXCHANGE_MODE.ETH_TO_ONE) {
+        res = await ethToOneErc721(
+          api,
+          operation,
+          web3Client.ethMethodsERС721,
+          hmyClient.hmyMethodsERC20,
+          prefix,
+          maxWaitingTime
+        );
+      }
+
+      if (type === EXCHANGE_MODE.ONE_TO_ETH) {
+        res = await oneToEthErc721(
+          api,
+          operation,
+          web3Client.ethMethodsERС721,
+          hmyClient.hmyMethodsERC721,
+          prefix,
+          maxWaitingTime
+        );
+      }
+    }
+
+    if ([TOKEN.BUSD, TOKEN.LINK].includes(token)) {
       if (type === EXCHANGE_MODE.ETH_TO_ONE) {
         res = await ethToOne(api, operation, ethMethods, prefix, maxWaitingTime);
       }

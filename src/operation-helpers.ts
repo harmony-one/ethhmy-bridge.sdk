@@ -69,6 +69,8 @@ export const getEthBalance = async (
   erc20?: string
 ) => {
   let res = 0;
+  let balance = 0;
+
   switch (token) {
     case TOKEN.BUSD:
       res = await web3Client.ethMethodsBUSD.checkEthBalance(address);
@@ -83,9 +85,14 @@ export const getEthBalance = async (
         return 0;
       }
 
-      const balance = await web3Client.ethMethodsERC20.checkEthBalance(erc20, address);
+      balance = await web3Client.ethMethodsERC20.checkEthBalance(erc20, address);
 
       return divDecimals(balance, erc20TokenDetails.decimals);
+
+    case TOKEN.ERC721:
+      balance = await web3Client.ethMethodsERС721.checkEthBalance(erc20, address);
+
+      return balance;
   }
 };
 
@@ -102,6 +109,8 @@ export const getOneBalance = async (
       res = await hmyClient.hmyMethodsBUSD.checkHmyBalance(address);
       return divDecimals(res, 18);
     case TOKEN.LINK:
+      res = await hmyClient.hmyMethodsLINK.checkHmyBalance(address);
+    case TOKEN.ERC721:
       res = await hmyClient.hmyMethodsLINK.checkHmyBalance(address);
       return divDecimals(res, 18);
     case TOKEN.ERC20:

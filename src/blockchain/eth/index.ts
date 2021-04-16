@@ -5,6 +5,7 @@ const Web3 = require('web3');
 import ethLINKAbi from '../out/MyERC20';
 import ethLINKManagerAbi from '../out/LINKEthManager';
 import ethManagerAbi from '../out/EthManagerERC20';
+import ethERC721ManagerAbi from '../out/EthManagerERC721';
 
 export interface IWeb3Client {
   web3: typeof Web3;
@@ -12,6 +13,7 @@ export interface IWeb3Client {
   ethMethodsBUSD: EthMethods;
   ethMethodsLINK: EthMethods;
   ethMethodsERC20: EthMethodsERC20;
+  ethMethodsERС721: EthMethodsERC20;
   getUserAddress: () => string;
   addWallet: (pk: string) => void;
   setUseMetamask: (value: boolean) => void;
@@ -25,6 +27,7 @@ export interface IWeb3ClientParams {
     busdManager: string;
     linkManager: string;
     erc20Manager: string;
+    erc721Manager: string;
   };
   gasPrice?: number;
   gasLimit?: number;
@@ -94,6 +97,20 @@ export const getWeb3Client = (params: IWeb3ClientParams): IWeb3Client => {
     gasApiKey,
   });
 
+  const ethManagerContractERC721 = new web3.eth.Contract(
+    ethERC721ManagerAbi,
+    contracts.erc721Manager
+  );
+
+  const ethMethodsERС721 = new EthMethodsERC20({
+    web3: web3,
+    ethManagerContract: ethManagerContractERC721,
+    ethManagerAddress: contracts.erc721Manager,
+    gasPrice,
+    gasLimit,
+    gasApiKey,
+  });
+
   const getEthBalance = (ethAddress: string): Promise<string> => {
     return new Promise((resolve, reject) => {
       web3.eth.getBalance(ethAddress, (err: string, balance: string) => {
@@ -118,6 +135,7 @@ export const getWeb3Client = (params: IWeb3ClientParams): IWeb3Client => {
     ethMethodsBUSD,
     ethMethodsLINK,
     ethMethodsERC20,
+    ethMethodsERС721,
     getUserAddress: () => ethUserAccount && ethUserAccount.address,
     setUseMetamask: (value: boolean) => {
       ethMethodsBUSD.setUseMetamask(value);

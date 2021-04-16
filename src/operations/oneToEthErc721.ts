@@ -6,7 +6,7 @@ import { EthMethodsERC20 } from '../blockchain/eth/EthMethodsERC20';
 import { HmyMethodsErc20Common } from '../blockchain/hmy';
 import { ValidatorsAPI } from '../api';
 
-export const oneToEthErc20 = async (
+export const oneToEthErc721 = async (
   api: ValidatorsAPI,
   operationParams: IOperation,
   ethMethods: EthMethodsERC20,
@@ -28,8 +28,6 @@ export const oneToEthErc20 = async (
     getHRC20Action = getActionByType(operation, ACTION_TYPE.getHRC20Address);
   }
 
-  const erc20TokenDetails = await ethMethods.tokenDetails(operationParams.erc20Address);
-
   const hrc20Address = await hmyMethods.getMappingFor(operationParams.erc20Address);
 
   if (!hrc20Address) {
@@ -41,14 +39,11 @@ export const oneToEthErc20 = async (
   if (approveHmyManger && approveHmyManger.status === STATUS.WAITING) {
     logger.pending({ prefix, message: 'approveHmyManger' });
 
-    const res: any = await hmyMethods.approveHmyManger(
-      hrc20Address,
-      operationParams.amount,
-      erc20TokenDetails.decimals,
-      (hash: string) => confirmCallback(api, hash, approveHmyManger.type, operationParams.id)
+    const res: any = await hmyMethods.setApprovalForAll(hrc20Address, (hash: string) =>
+      confirmCallback(api, hash, approveHmyManger.type, operationParams.id)
     );
 
-    logger.info({ prefix, message: 'Status: ' + res.status });
+    logger.info({ prefix, message: 'Status: ' + res && res.status });
     logger.success({ prefix, message: 'approveHmyManger' });
   }
 
@@ -59,11 +54,10 @@ export const oneToEthErc20 = async (
   if (burnToken && burnToken.status === STATUS.WAITING) {
     logger.pending({ prefix, message: 'burnToken' });
 
-    const res: any = await hmyMethods.burnToken(
+    const res: any = await hmyMethods.burnTokens(
       hrc20Address,
       operationParams.ethAddress,
       operationParams.amount,
-      erc20TokenDetails.decimals,
       (hash: string) => confirmCallback(api, hash, burnToken.type, operationParams.id)
     );
 

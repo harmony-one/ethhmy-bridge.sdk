@@ -14,6 +14,7 @@ interface IBridgeSDKInitParams {
   api: IAPIParams;
   ethClient: typeof configs.mainnet.ethClient;
   hmyClient: typeof configs.mainnet.hmyClient;
+  sdk?: 'harmony' | 'web3';
 }
 
 interface IBridgeSDKOptions {
@@ -32,7 +33,7 @@ export class BridgeSDK {
   init = async (params: IBridgeSDKInitParams) => {
     this.api = new ValidatorsAPI(params.api);
     this.web3Client = getWeb3Client(params.ethClient);
-    this.hmyClient = await getHmyClient(params.hmyClient);
+    this.hmyClient = await getHmyClient({ ...params.hmyClient, sdk: params.sdk });
   };
 
   addOneWallet = async (privateKey: string) => {

@@ -1,6 +1,6 @@
 {
   "name": "bridge-sdk",
-  "version": "1.0.17",
+  "version": "1.0.18",
   "description": "bridge-sdk",
   "main": "./lib/index.js",
   "types": "lib/index.d.ts",
@@ -23,6 +23,8 @@
     "@types/websocket": "^1.0.1",
     "@typescript-eslint/eslint-plugin": "^4.4.0",
     "@typescript-eslint/parser": "^4.4.0",
+    "bn.js": "^5.1.3",
+    "dotenv": "^8.2.0",
     "eslint": "^7.10.0",
     "eslint-config-prettier": "^6.12.0",
     "eslint-config-standard": "^14.1.1",
@@ -35,6 +37,7 @@
     "nodemon": "^2.0.4",
     "prettier": "^2.1.2",
     "rimraf": "^3.0.0",
+    "signale": "^1.4.0",
     "ts-node": "^9.0.0",
     "tslib": "^1.10.0",
     "typescript": "^4.0.3"
