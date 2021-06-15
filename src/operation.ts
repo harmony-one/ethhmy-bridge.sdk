@@ -1,5 +1,5 @@
 import { logger } from './utils/logs';
-import { EXCHANGE_MODE, IOperation, TOKEN } from './interfaces';
+import { EXCHANGE_MODE, IOperation, NETWORK_TYPE, TOKEN } from './interfaces';
 import { IHmyClient } from './blockchain/hmy';
 import { IWeb3Client } from './blockchain';
 import { checkStatus, getEthBalance, getOneBalance, logOperationParams } from './operation-helpers';
@@ -26,6 +26,7 @@ export const operation = async (
     ethAddress: string;
     erc20Address?: string;
     maxWaitingTime: number;
+    network: NETWORK_TYPE;
   },
   callback: (id: string) => void
 ) => {
@@ -63,6 +64,7 @@ export const operation = async (
       type,
       token,
       erc20Address,
+      network: params.network,
     };
 
     logger.info({ prefix, message: 'ONE balance before: ' + oneBalanceBefore });

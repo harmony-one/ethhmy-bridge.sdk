@@ -63,7 +63,7 @@ export const ethToOneErc20 = async (
       (hash: string) => confirmCallback(api, hash, lockToken.type, operationParams.id)
     );
 
-    logger.info({ prefix, message: 'Status: ' + res.status });
+    logger.info({ prefix, message: 'Status: ' + (res ? res.status : '') });
     logger.success({ prefix, message: 'lockToken' });
   }
 
