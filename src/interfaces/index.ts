@@ -61,11 +61,17 @@ export interface IAction {
   depositAmount?: number;
 }
 
+export enum NETWORK_TYPE {
+  ETHEREUM = 'ETHEREUM',
+  BINANCE = 'BINANCE',
+}
+
 export interface IOperation {
   id: string;
   type: EXCHANGE_MODE;
   token: TOKEN;
   status: STATUS;
+  network: NETWORK_TYPE;
   amount: number;
   fee: number;
   ethAddress: string;

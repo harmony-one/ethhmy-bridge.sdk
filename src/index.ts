@@ -6,7 +6,7 @@ import { IWeb3Client, IHmyClient } from './blockchain';
 import { getWeb3Client } from './blockchain/eth';
 import { getHmyClient } from './blockchain/hmy';
 import { operation } from './operation';
-import { EXCHANGE_MODE, TOKEN } from './interfaces';
+import { EXCHANGE_MODE, NETWORK_TYPE, TOKEN } from './interfaces';
 import * as configs from './configs';
 import { logger } from './utils/logs';
 
@@ -51,7 +51,7 @@ export class BridgeSDK {
   setUseMetamask = (value: boolean) => {
     this.ethClient.setUseMetamask(value);
     this.bscClient.setUseMetamask(value);
-  }
+  };
 
   setUseOneWallet = (value: boolean) => this.hmyClient.setUseOneWallet(value);
 
@@ -62,7 +62,7 @@ export class BridgeSDK {
       type: EXCHANGE_MODE;
       token: TOKEN;
       amount: number;
-      network?: 'binance' | 'ethereum';
+      network?: NETWORK_TYPE;
       oneAddress: string;
       ethAddress: string;
       erc20Address?: string;
@@ -74,9 +74,10 @@ export class BridgeSDK {
       {
         ...params,
         api: this.api,
-        web3Client: params.network === 'binance' ? this.bscClient : this.ethClient,
+        web3Client: params.network === NETWORK_TYPE.BINANCE ? this.bscClient : this.ethClient,
         hmyClient: this.hmyClient,
         maxWaitingTime: params.maxWaitingTime || 20 * 60,
+        network: params.network || NETWORK_TYPE.ETHEREUM,
       },
       callback
     );
