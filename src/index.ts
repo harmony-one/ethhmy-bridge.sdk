@@ -13,6 +13,7 @@ import { logger } from './utils/logs';
 interface IBridgeSDKInitParams {
   api: IAPIParams;
   ethClient: typeof configs.mainnet.ethClient;
+  binanceClient: typeof configs.mainnet.binanceClient;
   hmyClient: typeof configs.mainnet.hmyClient;
   sdk?: 'harmony' | 'web3';
 }
@@ -23,7 +24,8 @@ interface IBridgeSDKOptions {
 
 export class BridgeSDK {
   api: ValidatorsAPI;
-  web3Client: IWeb3Client;
+  ethClient: IWeb3Client;
+  bscClient: IWeb3Client;
   hmyClient: IHmyClient;
 
   constructor(params?: IBridgeSDKOptions) {
@@ -32,7 +34,8 @@ export class BridgeSDK {
 
   init = async (params: IBridgeSDKInitParams) => {
     this.api = new ValidatorsAPI(params.api);
-    this.web3Client = getWeb3Client(params.ethClient);
+    this.ethClient = getWeb3Client(params.ethClient);
+    this.bscClient = getWeb3Client(params.binanceClient);
     this.hmyClient = await getHmyClient({ ...params.hmyClient, sdk: params.sdk });
   };
 
@@ -41,10 +44,14 @@ export class BridgeSDK {
   };
 
   addEthWallet = async (privateKey: string) => {
-    await this.web3Client.addWallet(privateKey);
+    await this.ethClient.addWallet(privateKey);
+    await this.bscClient.addWallet(privateKey);
   };
 
-  setUseMetamask = (value: boolean) => this.web3Client.setUseMetamask(value);
+  setUseMetamask = (value: boolean) => {
+    this.ethClient.setUseMetamask(value);
+    this.bscClient.setUseMetamask(value);
+  }
 
   setUseOneWallet = (value: boolean) => this.hmyClient.setUseOneWallet(value);
 
@@ -55,6 +62,7 @@ export class BridgeSDK {
       type: EXCHANGE_MODE;
       token: TOKEN;
       amount: number;
+      network?: 'binance' | 'ethereum';
       oneAddress: string;
       ethAddress: string;
       erc20Address?: string;
@@ -66,7 +74,7 @@ export class BridgeSDK {
       {
         ...params,
         api: this.api,
-        web3Client: this.web3Client,
+        web3Client: params.network === 'binance' ? this.bscClient : this.ethClient,
         hmyClient: this.hmyClient,
         maxWaitingTime: params.maxWaitingTime || 20 * 60,
       },
