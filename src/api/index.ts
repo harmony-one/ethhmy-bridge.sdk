@@ -22,7 +22,7 @@ interface IMintTokens {
   token: string;
 }
 
-interface IConfirmActionParams {
+export interface IConfirmActionParams {
   operationId: string;
   actionType: string;
   transactionHash: string;

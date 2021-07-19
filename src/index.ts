@@ -1,7 +1,9 @@
+import { OperationClass } from './OperationClass';
+
 export * from './interfaces';
 export * from './configs';
 
-import { IAPIParams, ValidatorsAPI } from './api';
+import { IAPIParams, ICreateOperationParams, ValidatorsAPI } from './api';
 import { IWeb3Client, IHmyClient } from './blockchain';
 import { getWeb3Client } from './blockchain/eth';
 import { getHmyClient } from './blockchain/hmy';
@@ -81,5 +83,21 @@ export class BridgeSDK {
       },
       callback
     );
+  };
+
+  createOperation = async (params: ICreateOperationParams) => {
+    const operation = new OperationClass(this);
+
+    await operation.create(params);
+
+    return operation;
+  };
+
+  restoreOperationById = async (id: string) => {
+    const operation = new OperationClass(this);
+
+    await operation.restoreById(id);
+
+    return operation;
   };
 }
