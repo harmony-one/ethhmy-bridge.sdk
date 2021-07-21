@@ -1,4 +1,4 @@
-const { BridgeSDK, TOKEN, EXCHANGE_MODE, STATUS, ACTION_TYPE } = require('../..');
+const { BridgeSDK, TOKEN, EXCHANGE_MODE, NETWORK_TYPE, ACTION_TYPE } = require('../..');
 const configs = require('../../lib/configs');
 
 const operationCall = async () => {
@@ -10,6 +10,7 @@ const operationCall = async () => {
     const operation = await bridgeSDK.createOperation({
       type: EXCHANGE_MODE.ETH_TO_ONE,
       token: TOKEN.BUSD,
+      network: NETWORK_TYPE.ETHEREUM, // NETWORK_TYPE.BINANCE
       amount: 0.01,
       oneAddress: 'one1we0fmuz9wdncqljwkpgj79k49cp4jxxxx',
       ethAddress: '0xc491a4c5c762b9E9453dB0A9e6a4431xxxxx',
