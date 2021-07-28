@@ -1,5 +1,6 @@
 import { ICreateOperationParams } from './api';
-import { BridgeSDK, IOperation } from './index';
+import { ACTION_TYPE, BridgeSDK, IOperation, STATUS } from './index';
+import { sleep } from './utils';
 
 export interface IConfirmActionParamsOperation {
   actionType: string;
@@ -33,6 +34,49 @@ export class OperationClass {
       actionType,
       transactionHash: 'skip',
       operationId: this.operation.id,
+    });
+  };
+
+  waitOperationComplete = async () => {
+    return new Promise(async (res, reject) => {
+      try {
+        while (
+          this.operation.status === STATUS.IN_PROGRESS ||
+          this.operation.status === STATUS.WAITING
+        ) {
+          this.operation = await this.sdk.api.getOperation(this.operation.id);
+          await sleep(3000);
+        }
+
+        if (this.operation.status === STATUS.SUCCESS) {
+          res(this.operation);
+        } else {
+          reject('Operation status: ' + this.operation.status);
+        }
+      } catch (e) {
+        reject(e);
+      }
+    });
+  };
+
+  waitActionComplete = async (actionType: ACTION_TYPE) => {
+    return new Promise(async (res, reject) => {
+      try {
+        const getAction = () => this.operation.actions.find(a => a.type === actionType);
+
+        while (getAction().status === STATUS.IN_PROGRESS || getAction().status === STATUS.WAITING) {
+          this.operation = await this.sdk.api.getOperation(this.operation.id);
+          await sleep(3000);
+        }
+
+        if (getAction().status === STATUS.SUCCESS) {
+          res(this.operation);
+        } else {
+          reject('Action status: ' + getAction().status);
+        }
+      } catch (e) {
+        reject(e);
+      }
     });
   };
 }
