@@ -1,4 +1,4 @@
-import { ACTION_TYPE, IOperation, STATUS } from '../interfaces';
+import { ACTION_TYPE, IOperation, STATUS, TOKEN } from '../interfaces';
 import { logger } from '../utils/logs';
 import { checkStatus, confirmCallback, getActionByType, waitAction } from '../operation-helpers';
 import { sleep } from '../utils';
@@ -15,22 +15,28 @@ export const oneToEthErc20 = async (
   maxWaitingTime: number
 ) => {
   let operation = await api.getOperation(operationParams.id);
+  let erc20TokenDetails;
+  let hrc20Address;
 
-  let getHRC20Action = getActionByType(operation, ACTION_TYPE.getHRC20Address);
+  if (operation.token !== TOKEN.ETH) {
+    let getHRC20Action = getActionByType(operation, ACTION_TYPE.getHRC20Address);
 
-  if (getHRC20Action) {
-    logger.wait({ prefix, message: 'getHRC20Address' });
+    if (getHRC20Action) {
+      logger.wait({ prefix, message: 'getHRC20Address' });
+    }
+
+    while (getHRC20Action && [STATUS.IN_PROGRESS, STATUS.WAITING].includes(getHRC20Action.status)) {
+      await sleep(3000);
+      operation = await api.getOperation(operationParams.id);
+      getHRC20Action = getActionByType(operation, ACTION_TYPE.getHRC20Address);
+    }
+
+    erc20TokenDetails = await ethMethods.tokenDetails(operationParams.erc20Address);
+    hrc20Address = await hmyMethods.getMappingFor(operationParams.erc20Address);
+  } else {
+    erc20TokenDetails = { decimals: 18 };
+    hrc20Address = operationParams.hrc20Address;
   }
-
-  while (getHRC20Action && [STATUS.IN_PROGRESS, STATUS.WAITING].includes(getHRC20Action.status)) {
-    await sleep(3000);
-    operation = await api.getOperation(operationParams.id);
-    getHRC20Action = getActionByType(operation, ACTION_TYPE.getHRC20Address);
-  }
-
-  const erc20TokenDetails = await ethMethods.tokenDetails(operationParams.erc20Address);
-
-  const hrc20Address = await hmyMethods.getMappingFor(operationParams.erc20Address);
 
   if (!hrc20Address) {
     throw new Error('hrc20Address not found');

@@ -9,13 +9,14 @@ import {
   ethToOne,
   ethToOneErc20,
   ethToOneErc721,
+  ethToOneETH,
+  ethToOneHRC20,
   ethToOneONE,
   oneToEth,
   oneToEthErc20,
   oneToEthErc721,
-  oneToEthONE,
   oneToEthHRC20,
-  ethToOneHRC20,
+  oneToEthONE,
 } from './operations';
 
 import { ValidatorsAPI } from './api';
@@ -189,6 +190,30 @@ export const operation = async (
           operation.network === NETWORK_TYPE.BINANCE
             ? hmyClient.hmyMethodsHRC20BSC
             : hmyClient.hmyMethodsHRC20,
+          prefix,
+          maxWaitingTime
+        );
+      }
+    }
+
+    if (token === TOKEN.ETH) {
+      if (type === EXCHANGE_MODE.ETH_TO_ONE) {
+        res = await ethToOneETH(
+          api,
+          operation,
+          web3Client.ethMethodsNative,
+          hmyClient.hmyMethodsERC20,
+          prefix,
+          maxWaitingTime
+        );
+      }
+
+      if (type === EXCHANGE_MODE.ONE_TO_ETH) {
+        res = await oneToEthErc20(
+          api,
+          operation,
+          web3Client.ethMethodsERC20,
+          hmyClient.hmyMethodsERC20,
           prefix,
           maxWaitingTime
         );

@@ -105,6 +105,9 @@ export const getEthBalance = async (
         18
       );
 
+    case TOKEN.ETH:
+      return await web3Client.getEthBalance(address);
+
     case TOKEN.HRC20:
       const hrc20TokenDetails = await hmyClient.hmyMethodsHRC20.tokenDetails(erc20);
 
@@ -157,6 +160,9 @@ export const getOneBalance = async (
 
     case TOKEN.ONE:
       return divDecimals(await hmyClient.hmyMethodsBUSD.checkHmyBalance(address), 18);
+
+    case TOKEN.ETH:
+      return divDecimals(await hmyClient.hmyMethodsERC20.checkHmyBalance(erc20, address), 18);
 
     case TOKEN.HRC20:
       const hrc20TokenDetails = await hmyClient.hmyMethodsHRC20.tokenDetails(erc20);

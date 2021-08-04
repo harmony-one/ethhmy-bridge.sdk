@@ -29,12 +29,14 @@ export class BridgeSDK {
   ethClient: IWeb3Client;
   bscClient: IWeb3Client;
   hmyClient: IHmyClient;
+  initParams: IBridgeSDKInitParams;
 
   constructor(params?: IBridgeSDKOptions) {
     logger.setLogLevel(params.logLevel);
   }
 
   init = async (params: IBridgeSDKInitParams) => {
+    this.initParams = params;
     this.api = new ValidatorsAPI(params.api);
     this.ethClient = getWeb3Client(params.ethClient);
     this.bscClient = getWeb3Client(params.binanceClient);
@@ -73,11 +75,23 @@ export class BridgeSDK {
     },
     callback?: (id: string) => void
   ) => {
+    const web3Client = params.network === NETWORK_TYPE.BINANCE ? this.bscClient : this.ethClient;
+
+    let hrc20AddressNative;
+
+    if (params.token === TOKEN.ETH) {
+      hrc20AddressNative =
+        params.network === NETWORK_TYPE.BINANCE
+          ? this.initParams.binanceClient.contracts.nativeTokenHRC20
+          : this.initParams.ethClient.contracts.nativeTokenHRC20;
+    }
+
     return await operation(
       {
         ...params,
+        hrc20Address: hrc20AddressNative || params.hrc20Address,
         api: this.api,
-        web3Client: params.network === NETWORK_TYPE.BINANCE ? this.bscClient : this.ethClient,
+        web3Client,
         hmyClient: this.hmyClient,
         maxWaitingTime: params.maxWaitingTime || 20 * 60,
         network: params.network || NETWORK_TYPE.ETHEREUM,

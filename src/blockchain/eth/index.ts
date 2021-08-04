@@ -8,6 +8,7 @@ import ethManagerAbi from '../out/EthManagerERC20';
 import { abi as ethManagerAbiHRC20 } from '../out/EthManagerHRC20';
 import ethERC721ManagerAbi from '../out/EthManagerERC721';
 import { EthMethodsHRC20 } from './EthMethodsHRC20';
+import { EthMethodsNative } from './EthMethodsNative';
 
 export interface IWeb3Client {
   web3: typeof Web3;
@@ -15,6 +16,7 @@ export interface IWeb3Client {
   ethMethodsBUSD: EthMethods;
   ethMethodsLINK: EthMethods;
   ethMethodsERC20: EthMethodsERC20;
+  ethMethodsNative: EthMethodsNative;
   ethMethodsHRC20: EthMethodsHRC20;
   ethMethodsERС721: EthMethodsERC20;
   getUserAddress: () => string;
@@ -107,6 +109,14 @@ export const getWeb3Client = (params: IWeb3ClientParams): IWeb3Client => {
     gasApiKey,
   });
 
+  const ethMethodsNative = new EthMethodsNative({
+    web3: web3,
+    ethManagerAddress: contracts.ethManager,
+    gasPrice,
+    gasLimit,
+    gasApiKey,
+  });
+
   const ethMethodsHRC20 = new EthMethodsHRC20({
     web3: web3,
     ethManagerContract: ethManagerContractHRC20,
@@ -154,6 +164,7 @@ export const getWeb3Client = (params: IWeb3ClientParams): IWeb3Client => {
     getEthBalance,
     ethMethodsBUSD,
     ethMethodsLINK,
+    ethMethodsNative,
     ethMethodsERC20,
     ethMethodsHRC20,
     ethMethodsERС721,
@@ -162,6 +173,7 @@ export const getWeb3Client = (params: IWeb3ClientParams): IWeb3Client => {
       ethMethodsBUSD.setUseMetamask(value);
       ethMethodsLINK.setUseMetamask(value);
       ethMethodsERC20.setUseMetamask(value);
+      ethMethodsNative.setUseMetamask(value);
     },
   };
 };
