@@ -15,6 +15,7 @@ export interface ICreateOperationParams {
   ethAddress: string;
   amount: number;
   erc20Address?: string;
+  hrc20Address?: string;
 }
 
 interface IMintTokens {

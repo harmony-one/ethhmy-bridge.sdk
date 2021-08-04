@@ -42,12 +42,11 @@ const ethClient: TConfig = {
     linkManager: '0xe65143628d598F867Ed5139Ff783bA6f33D51bFa',
     erc20Manager: '0xba1f4b06225A2Cf8B56D711539CbbeF1c097a886',
     erc721Manager: '0x364907a5B9ba4A3353B4Dd11aDC0b2bE8AC58253',
-
-    multisigWallet: '',
-    hrc20Manager: '',
-    ethManager: '',
-    tokenManager: '',
-    nativeTokenHRC20: '',
+    multisigWallet: '0x4D2F08369476F21D4DEB834b6EA9c41ACAd11413',
+    tokenManager: '0xAa0fFF0074E898B922DBAb2c7496cdcC84A28fa0',
+    hrc20Manager: '0xA64D59E4350f61679ACDE8eEC06421233Bd2B4E1',
+    ethManager: '0xCE670B66C5296e29AB39aBECBC92c60ea330F5dC',
+    nativeTokenHRC20: '0x268d6fF391B41B36A13B1693BD25f87FB4E4b392',
   },
   gasPrice: 100000000000,
   gasLimit: 150000,
@@ -64,6 +63,9 @@ const hmyClient = {
     erc20Manager: '0x97a5455c765c55b6d37eb87ee6bb1205cbf0c570',
     erc721Manager: '0xaf573bc93dee447151d5ad778f07eb070f4e82e4',
     depositManager: '0xce3110e4ab757672b0535a9c1410fed80647b693',
+
+    hrc20Manager: '0x9dd9b932e55702a6f50c676d817af04aa91a43af',
+    hrc20BSCManager: '0x87e91c87196de58f6dc413d81c699da8ef39e4b9',
   },
 };
 
@@ -71,5 +73,5 @@ export const testnet = {
   api,
   ethClient,
   hmyClient,
-  binanceClient
+  binanceClient,
 };

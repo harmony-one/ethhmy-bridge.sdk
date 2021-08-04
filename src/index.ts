@@ -68,6 +68,7 @@ export class BridgeSDK {
       oneAddress: string;
       ethAddress: string;
       erc20Address?: string;
+      hrc20Address?: string;
       maxWaitingTime?: number;
     },
     callback?: (id: string) => void

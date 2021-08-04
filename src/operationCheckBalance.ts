@@ -42,7 +42,7 @@ export const operation = async (params: {
   try {
     logger.start({ prefix, message: `test ${token.toUpperCase()}: ${type.toUpperCase()}` });
 
-    const ethBalanceBefore = await getEthBalance(web3Client, token, erc20Address);
+    const ethBalanceBefore = await getEthBalance(web3Client, hmyClient, token, erc20Address);
     const oneBalanceBefore = await getOneBalance(hmyClient, web3Client, token, erc20Address);
 
     const operationParams = {
@@ -124,7 +124,7 @@ export const operation = async (params: {
       return false;
     }
 
-    const ethBalanceAfter = await getEthBalance(web3Client, token, erc20Address);
+    const ethBalanceAfter = await getEthBalance(web3Client, hmyClient, token, erc20Address);
     logger.info({ prefix, message: 'ETH balance before: ' + ethBalanceBefore });
     logger.info({ prefix, message: 'ETH balance after: ' + ethBalanceAfter });
 

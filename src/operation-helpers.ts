@@ -64,6 +64,7 @@ export const checkStatus = (operation: { status: STATUS }, prefix: string, actio
 
 export const getEthBalance = async (
   web3Client: IWeb3Client,
+  hmyClient: IHmyClient,
   token: TOKEN,
   address: string,
   erc20?: string
@@ -93,6 +94,34 @@ export const getEthBalance = async (
       balance = await web3Client.ethMethodsERС721.checkEthBalance(erc20, address);
 
       return balance;
+
+    case TOKEN.ONE:
+      const erc20Address = await web3Client.ethMethodsHRC20.getMappingFor(
+        '0x00eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
+      );
+
+      return divDecimals(
+        await web3Client.ethMethodsHRC20.checkEthBalance(erc20Address, address),
+        18
+      );
+
+    case TOKEN.HRC20:
+      const hrc20TokenDetails = await hmyClient.hmyMethodsHRC20.tokenDetails(erc20);
+
+      if (!hrc20TokenDetails) {
+        return 0;
+      }
+
+      const erc20AddressE = await web3Client.ethMethodsHRC20.getMappingFor(erc20);
+
+      if (!Number(erc20AddressE)) {
+        return 0;
+      }
+
+      return divDecimals(
+        await web3Client.ethMethodsHRC20.checkEthBalance(erc20AddressE, address),
+        hrc20TokenDetails.decimals
+      );
   }
 };
 
@@ -125,6 +154,21 @@ export const getOneBalance = async (
       const balance = await hmyClient.hmyMethodsERC20.checkHmyBalance(hrc20Address, address);
 
       return divDecimals(balance, erc20TokenDetails.decimals);
+
+    case TOKEN.ONE:
+      return divDecimals(await hmyClient.hmyMethodsBUSD.checkHmyBalance(address), 18);
+
+    case TOKEN.HRC20:
+      const hrc20TokenDetails = await hmyClient.hmyMethodsHRC20.tokenDetails(erc20);
+
+      if (!hrc20TokenDetails) {
+        return 0;
+      }
+
+      return divDecimals(
+        await hmyClient.hmyMethodsHRC20.checkHmyBalance(erc20, address),
+        hrc20TokenDetails.decimals
+      );
   }
 };
 

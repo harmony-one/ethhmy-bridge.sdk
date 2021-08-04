@@ -44,12 +44,11 @@ const ethClient: TConfig = {
     linkManager: '0xfE601dE9D4295274b9904D5a9Ad7069F23eE2B32',
     erc20Manager: '0x2dCCDB493827E15a5dC8f8b72147E6c4A5620857',
     erc721Manager: '0x426A61A2127fDD1318Ec0EdCe02474f382FdAd30',
-
-    multisigWallet: '',
-    hrc20Manager: '',
-    ethManager: '',
-    tokenManager: '',
-    nativeTokenHRC20: '',
+    multisigWallet: '0x715CdDa5e9Ad30A0cEd14940F9997EE611496De6',
+    hrc20Manager: '0x4D34E61CaF7A3622759D69e48CCDeB8dee5021e8',
+    tokenManager: '0x1Bd0029385F95AD2584cDFaf5C19F3F20651dEf6',
+    ethManager: '0xF9Fb1c508Ff49F78b60d3A96dea99Fa5d7F3A8A6',
+    nativeTokenHRC20: '0x6983D1E6DEf3690C4d616b13597A09e6193EA013',
   },
   gasPrice: 100000000000,
   gasLimit: 150000,
@@ -66,6 +65,9 @@ const hmyClient = {
     erc20Manager: '0x2fbbcef71544c461edfc311f42e3583d5f9675d1',
     erc721Manager: '0x39ec213272dda1f46424726bb20d82c3861568c0',
     depositManager: '0xce3110e4ab757672b0535a9c1410fed80647b693',
+
+    hrc20Manager: '0x38092d17d3641b6fa49668775948af71b430765e',
+    hrc20BSCManager: '0x38092d17d3641b6fa49668775948af71b430765e',
   },
 };
 

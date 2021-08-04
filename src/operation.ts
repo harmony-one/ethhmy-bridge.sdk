@@ -1,18 +1,25 @@
 import { logger } from './utils/logs';
 import { EXCHANGE_MODE, IOperation, NETWORK_TYPE, TOKEN } from './interfaces';
-import { IHmyClient } from './blockchain/hmy';
+import { HmyMethodsCommon, IHmyClient } from './blockchain/hmy';
 import { IWeb3Client } from './blockchain';
 import { checkStatus, getEthBalance, getOneBalance, logOperationParams } from './operation-helpers';
-import { ethToOne } from './operations/ethToOne';
-import { oneToEth } from './operations/oneToEth';
-import { oneToEthErc20 } from './operations/oneToEthErc20';
-import { ethToOneErc20 } from './operations/ethToOneErc20';
+
+import {
+  depositOne,
+  ethToOne,
+  ethToOneErc20,
+  ethToOneErc721,
+  ethToOneONE,
+  oneToEth,
+  oneToEthErc20,
+  oneToEthErc721,
+  oneToEthONE,
+  oneToEthHRC20,
+  ethToOneHRC20,
+} from './operations';
+
 import { ValidatorsAPI } from './api';
-import { HmyMethodsCommon } from './blockchain/hmy';
 import { EthMethods } from './blockchain/eth/EthMethods';
-import { depositOne } from './operations/oneDeposit';
-import { ethToOneErc721 } from './operations/ethToOneErc721';
-import { oneToEthErc721 } from './operations/oneToEthErc721';
 
 export const operation = async (
   params: {
@@ -25,6 +32,7 @@ export const operation = async (
     oneAddress: string;
     ethAddress: string;
     erc20Address?: string;
+    hrc20Address?: string;
     maxWaitingTime: number;
     network: NETWORK_TYPE;
   },
@@ -40,6 +48,7 @@ export const operation = async (
     type,
     amount,
     erc20Address,
+    hrc20Address,
     maxWaitingTime,
   } = params;
 
@@ -48,13 +57,19 @@ export const operation = async (
   try {
     logger.start({ prefix, message: `test ${token.toUpperCase()}: ${type.toUpperCase()}` });
 
-    const ethBalanceBefore = await getEthBalance(web3Client, token, ethAddress, erc20Address);
+    const ethBalanceBefore = await getEthBalance(
+      web3Client,
+      hmyClient,
+      token,
+      ethAddress,
+      erc20Address || hrc20Address
+    );
     const oneBalanceBefore = await getOneBalance(
       hmyClient,
       web3Client,
       token,
       oneAddress,
-      erc20Address
+      erc20Address || hrc20Address
     );
 
     const operationParams = {
@@ -64,6 +79,7 @@ export const operation = async (
       type,
       token,
       erc20Address,
+      hrc20Address,
       network: params.network,
     };
 
@@ -121,6 +137,58 @@ export const operation = async (
           operation,
           web3Client.ethMethodsERC20,
           hmyClient.hmyMethodsERC20,
+          prefix,
+          maxWaitingTime
+        );
+      }
+    }
+
+    if (token === TOKEN.ONE) {
+      if (type === EXCHANGE_MODE.ETH_TO_ONE) {
+        res = await ethToOneONE(
+          api,
+          operation,
+          web3Client.ethMethodsHRC20,
+          hmyClient.hmyMethodsHRC20,
+          prefix,
+          maxWaitingTime
+        );
+      }
+
+      if (type === EXCHANGE_MODE.ONE_TO_ETH) {
+        res = await oneToEthONE(
+          api,
+          operation,
+          web3Client.ethMethodsHRC20,
+          operation.network === NETWORK_TYPE.BINANCE
+            ? hmyClient.hmyMethodsHRC20BSC
+            : hmyClient.hmyMethodsHRC20,
+          prefix,
+          maxWaitingTime
+        );
+      }
+    }
+
+    if (token === TOKEN.HRC20) {
+      if (type === EXCHANGE_MODE.ETH_TO_ONE) {
+        res = await ethToOneHRC20(
+          api,
+          operation,
+          web3Client.ethMethodsHRC20,
+          hmyClient.hmyMethodsHRC20,
+          prefix,
+          maxWaitingTime
+        );
+      }
+
+      if (type === EXCHANGE_MODE.ONE_TO_ETH) {
+        res = await oneToEthHRC20(
+          api,
+          operation,
+          web3Client.ethMethodsHRC20,
+          operation.network === NETWORK_TYPE.BINANCE
+            ? hmyClient.hmyMethodsHRC20BSC
+            : hmyClient.hmyMethodsHRC20,
           prefix,
           maxWaitingTime
         );

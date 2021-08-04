@@ -5,7 +5,9 @@ const Web3 = require('web3');
 import ethLINKAbi from '../out/MyERC20';
 import ethLINKManagerAbi from '../out/LINKEthManager';
 import ethManagerAbi from '../out/EthManagerERC20';
+import { abi as ethManagerAbiHRC20 } from '../out/EthManagerHRC20';
 import ethERC721ManagerAbi from '../out/EthManagerERC721';
+import { EthMethodsHRC20 } from './EthMethodsHRC20';
 
 export interface IWeb3Client {
   web3: typeof Web3;
@@ -13,6 +15,7 @@ export interface IWeb3Client {
   ethMethodsBUSD: EthMethods;
   ethMethodsLINK: EthMethods;
   ethMethodsERC20: EthMethodsERC20;
+  ethMethodsHRC20: EthMethodsHRC20;
   ethMethodsERС721: EthMethodsERC20;
   getUserAddress: () => string;
   addWallet: (pk: string) => void;
@@ -28,6 +31,12 @@ export interface IWeb3ClientParams {
     linkManager: string;
     erc20Manager: string;
     erc721Manager: string;
+
+    multisigWallet: string;
+    hrc20Manager: string;
+    ethManager: string;
+    tokenManager: string;
+    nativeTokenHRC20: string;
   };
   gasPrice?: number;
   gasLimit?: number;
@@ -87,11 +96,22 @@ export const getWeb3Client = (params: IWeb3ClientParams): IWeb3Client => {
   });
 
   const ethManagerContract = new web3.eth.Contract(ethManagerAbi, contracts.erc20Manager);
+  const ethManagerContractHRC20 = new web3.eth.Contract(ethManagerAbiHRC20, contracts.hrc20Manager);
 
   const ethMethodsERC20 = new EthMethodsERC20({
     web3: web3,
     ethManagerContract: ethManagerContract,
     ethManagerAddress: contracts.erc20Manager,
+    gasPrice,
+    gasLimit,
+    gasApiKey,
+  });
+
+  const ethMethodsHRC20 = new EthMethodsHRC20({
+    web3: web3,
+    ethManagerContract: ethManagerContractHRC20,
+    ethManagerAddress: contracts.hrc20Manager,
+    ethTokenManagerAddress: contracts.tokenManager,
     gasPrice,
     gasLimit,
     gasApiKey,
@@ -135,6 +155,7 @@ export const getWeb3Client = (params: IWeb3ClientParams): IWeb3Client => {
     ethMethodsBUSD,
     ethMethodsLINK,
     ethMethodsERC20,
+    ethMethodsHRC20,
     ethMethodsERС721,
     getUserAddress: () => ethUserAccount && ethUserAccount.address,
     setUseMetamask: (value: boolean) => {

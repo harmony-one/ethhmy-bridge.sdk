@@ -7,6 +7,9 @@ export enum TOKEN {
   BUSD = 'busd',
   LINK = 'link',
   ERC20 = 'erc20',
+  HRC20 = 'hrc20',
+  // ETH = 'eth',
+  ONE = 'one',
   ERC721 = 'erc721',
 }
 
@@ -79,6 +82,7 @@ export interface IOperation {
   actions: Array<IAction>;
   timestamp: number;
   erc20Address?: string;
+  hrc20Address?: string;
 }
 
 export interface ITokenInfo {
