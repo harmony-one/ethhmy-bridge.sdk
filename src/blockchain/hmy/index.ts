@@ -252,11 +252,17 @@ export const getHmyClient = async (params: IHmyClientParams): Promise<IHmyClient
         hmyMethodsLINK.setUseMetamask(value);
         hmyMethodsERC20.setUseMetamask(value);
         hmyMethodsHRC20.setUseMetamask(value);
+        hmyMethodsERC721.setUseMetamask(value);
+        hmyMethodsDeposit.setUseMetamask(value);
+        hmyMethodsHRC20BSC.setUseMetamask(value);
       } else {
         hmyMethodsBUSD.setUseOneWallet(value);
         hmyMethodsLINK.setUseOneWallet(value);
         hmyMethodsERC20.setUseOneWallet(value);
         hmyMethodsHRC20.setUseOneWallet(value);
+        hmyMethodsERC721.setUseOneWallet(value);
+        hmyMethodsDeposit.setUseOneWallet(value);
+        hmyMethodsHRC20BSC.setUseOneWallet(value);
       }
     },
     setUseMathWallet: (value: boolean) => {
@@ -265,11 +271,17 @@ export const getHmyClient = async (params: IHmyClientParams): Promise<IHmyClient
         hmyMethodsLINK.setUseMetamask(value);
         hmyMethodsERC20.setUseMetamask(value);
         hmyMethodsHRC20.setUseMetamask(value);
+        hmyMethodsERC721.setUseMetamask(value);
+        hmyMethodsDeposit.setUseMetamask(value);
+        hmyMethodsHRC20BSC.setUseMetamask(value);
       } else {
         hmyMethodsBUSD.setUseMathWallet(value);
         hmyMethodsLINK.setUseMathWallet(value);
         hmyMethodsERC20.setUseMathWallet(value);
         hmyMethodsHRC20.setUseMathWallet(value);
+        hmyMethodsERC721.setUseMathWallet(value);
+        hmyMethodsDeposit.setUseMathWallet(value);
+        hmyMethodsHRC20BSC.setUseMathWallet(value);
       }
     },
   };

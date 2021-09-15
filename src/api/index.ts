@@ -102,7 +102,7 @@ export class ValidatorsAPI {
     const id = uuid();
 
     return this.callAction(async url => {
-      const res = await agent.post<{ body: IOperation }>(url + '/operations', { ...params, id });
+      const res = await agent.post<{ body: IOperation }>(url + '/operations', { id, ...params });
 
       return res.body;
     });

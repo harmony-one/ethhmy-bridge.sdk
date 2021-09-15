@@ -174,6 +174,8 @@ export const getWeb3Client = (params: IWeb3ClientParams): IWeb3Client => {
       ethMethodsLINK.setUseMetamask(value);
       ethMethodsERC20.setUseMetamask(value);
       ethMethodsNative.setUseMetamask(value);
+      ethMethodsERС721.setUseMetamask(value);
+      ethMethodsHRC20.setUseMetamask(value);
     },
   };
 };

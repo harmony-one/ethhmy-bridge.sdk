@@ -3,10 +3,10 @@ import { TConfig } from './index';
 const api = {
   validators: [
     'https://be1.bridge.hmny.io',
-    'https://be2.bridge.hmny.io',
-    'https://be3.bridge.hmny.io',
+    'https://marsinitiative.one',
+    'https://harmony.kratosvalidator.com',
   ],
-  threshold: 2, // minimum validators number to do operation
+  threshold: 1, // minimum validators number to do operation
   assetServiceUrl: 'https://be4.bridge.hmny.io', // assets statistic service
 };
 
@@ -75,5 +75,5 @@ export const mainnet = {
   api,
   ethClient,
   hmyClient,
-  binanceClient
+  binanceClient,
 };
