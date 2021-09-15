@@ -44,7 +44,7 @@ export class HmyMethodsERC20Web3 {
     let accounts;
     if (this.useMetamask) {
       // @ts-ignore
-      accounts = await ethereum.enable();
+      accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
     }
 
     const res = await hmyTokenContract.methods
@@ -69,7 +69,7 @@ export class HmyMethodsERC20Web3 {
     let accounts;
     if (this.useMetamask) {
       // @ts-ignore
-      accounts = await ethereum.enable();
+      accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
     }
 
     const userAddrHex = getAddress(userAddr).checksum;
@@ -112,7 +112,7 @@ export class HmyMethodsERC20Web3 {
     let accounts;
     if (this.useMetamask) {
       // @ts-ignore
-      accounts = await ethereum.enable();
+      accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
     }
 
     let res = await hmyTokenContract.methods
@@ -153,7 +153,7 @@ export class HmyMethodsERC20Web3 {
 
     if (this.useMetamask) {
       // @ts-ignore
-      accounts = await ethereum.enable();
+      accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
     }
 
     const userAddrHex = getAddress(userAddr).checksum;

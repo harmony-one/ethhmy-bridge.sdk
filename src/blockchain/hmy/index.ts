@@ -84,7 +84,17 @@ export const getHmyClient = async (params: IHmyClientParams): Promise<IHmyClient
     hmyMethodsERC721: HmyMethodsErc20Common,
     hmyMethodsDeposit: HmyMethodsDepositCommon;
 
-  const web3 = new Web3(params.nodeURL);
+  // @ts-ignore
+  let web3URL;
+
+  try {
+    // @ts-ignore
+    web3URL = window.ethereum;
+  } catch (e) {
+    web3URL = params.nodeURL;
+  }
+
+  const web3 = new Web3(web3URL);
 
   if (params.sdk === 'web3') {
     const hmyBUSDContract = new web3.eth.Contract(hmyLINKAbi, contracts.busd);
@@ -252,7 +262,7 @@ export const getHmyClient = async (params: IHmyClientParams): Promise<IHmyClient
         hmyMethodsLINK.setUseMetamask(value);
         hmyMethodsERC20.setUseMetamask(value);
         hmyMethodsHRC20.setUseMetamask(value);
-        hmyMethodsERC721.setUseMetamask(value);
+        // hmyMethodsERC721.setUseMetamask(value);
         hmyMethodsDeposit.setUseMetamask(value);
         hmyMethodsHRC20BSC.setUseMetamask(value);
       } else {
@@ -271,7 +281,7 @@ export const getHmyClient = async (params: IHmyClientParams): Promise<IHmyClient
         hmyMethodsLINK.setUseMetamask(value);
         hmyMethodsERC20.setUseMetamask(value);
         hmyMethodsHRC20.setUseMetamask(value);
-        hmyMethodsERC721.setUseMetamask(value);
+        // hmyMethodsERC721.setUseMetamask(value);
         hmyMethodsDeposit.setUseMetamask(value);
         hmyMethodsHRC20BSC.setUseMetamask(value);
       } else {

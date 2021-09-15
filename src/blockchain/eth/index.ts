@@ -51,7 +51,7 @@ export const getWeb3Client = (params: IWeb3ClientParams): IWeb3Client => {
 
   try {
     // @ts-ignore
-    web3URL = window.web3.currentProvider;
+    web3URL = window.ethereum;
   } catch (e) {
     web3URL = params.nodeURL;
   }

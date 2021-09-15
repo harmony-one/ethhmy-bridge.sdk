@@ -45,7 +45,7 @@ export class EthMethodsERC20 {
     let accounts;
     if (this.useMetamask) {
       // @ts-ignore
-      accounts = await ethereum.enable();
+      accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
     }
 
     const erc20Contract = new this.web3.eth.Contract(MyERC20Abi, erc20Address);
@@ -70,7 +70,7 @@ export class EthMethodsERC20 {
     let accounts;
     if (this.useMetamask) {
       // @ts-ignore
-      accounts = await ethereum.enable();
+      accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
     }
 
     const hmyAddrHex = getAddress(userAddr).checksum;
@@ -114,7 +114,7 @@ export class EthMethodsERC20 {
     let accounts;
     if (this.useMetamask) {
       // @ts-ignore
-      accounts = await ethereum.enable();
+      accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
     }
     // @ts-ignore
     const erc20Contract = new this.web3.eth.Contract(MyERC20Abi, erc20Address);
@@ -149,7 +149,7 @@ export class EthMethodsERC20 {
     let accounts;
     if (this.useMetamask) {
       // @ts-ignore
-      accounts = await ethereum.enable();
+      accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
     }
 
     const hmyAddrHex = getAddress(userAddr).checksum;

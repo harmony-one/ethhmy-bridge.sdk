@@ -42,7 +42,7 @@ export class EthMethods {
     let accounts;
     if (this.useMetamask) {
       // @ts-ignore
-      accounts = await ethereum.enable();
+      accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
     }
 
     return await this.ethTokenContract.methods
@@ -59,7 +59,7 @@ export class EthMethods {
     let accounts;
     if (this.useMetamask) {
       // @ts-ignore
-      accounts = await ethereum.enable();
+      accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
     }
 
     const hmyAddrHex = getAddress(userAddr).checksum;

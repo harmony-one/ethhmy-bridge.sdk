@@ -2,7 +2,7 @@ import { logger } from './utils/logs';
 import { EXCHANGE_MODE, IOperation, NETWORK_TYPE, TOKEN } from './interfaces';
 import { HmyMethodsCommon, IHmyClient } from './blockchain/hmy';
 import { IWeb3Client } from './blockchain';
-import { checkStatus, getEthBalance, getOneBalance, logOperationParams } from './operation-helpers';
+import { checkStatus, logOperationParams } from './operation-helpers';
 
 import {
   depositOne,
@@ -58,20 +58,20 @@ export const operation = async (
   try {
     logger.start({ prefix, message: `test ${token.toUpperCase()}: ${type.toUpperCase()}` });
 
-    const ethBalanceBefore = await getEthBalance(
-      web3Client,
-      hmyClient,
-      token,
-      ethAddress,
-      erc20Address || hrc20Address
-    );
-    const oneBalanceBefore = await getOneBalance(
-      hmyClient,
-      web3Client,
-      token,
-      oneAddress,
-      erc20Address || hrc20Address
-    );
+    // const ethBalanceBefore = await getEthBalance(
+    //   web3Client,
+    //   hmyClient,
+    //   token,
+    //   ethAddress,
+    //   erc20Address || hrc20Address
+    // );
+    // const oneBalanceBefore = await getOneBalance(
+    //   hmyClient,
+    //   web3Client,
+    //   token,
+    //   oneAddress,
+    //   erc20Address || hrc20Address
+    // );
 
     const operationParams = {
       oneAddress,
@@ -84,8 +84,8 @@ export const operation = async (
       network: params.network,
     };
 
-    logger.info({ prefix, message: 'ONE balance before: ' + oneBalanceBefore });
-    logger.info({ prefix, message: 'ETH balance before: ' + ethBalanceBefore });
+    // logger.info({ prefix, message: 'ONE balance before: ' + oneBalanceBefore });
+    // logger.info({ prefix, message: 'ETH balance before: ' + ethBalanceBefore });
 
     logger.pending({ prefix, message: 'create operation' });
 
