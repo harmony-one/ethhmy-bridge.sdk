@@ -6,7 +6,7 @@ const api = {
     'https://marsinitiative.one',
     'https://harmony.kratosvalidator.com',
   ],
-  threshold: 1, // minimum validators number to do operation
+  threshold: 2, // minimum validators number to do operation
   assetServiceUrl: 'https://be4.bridge.hmny.io', // assets statistic service
 };
 
