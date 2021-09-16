@@ -1,6 +1,6 @@
 {
   "name": "bridge-sdk",
-  "version": "2.8.0",
+  "version": "2.9.0",
   "description": "bridge-sdk",
   "main": "./lib/index.js",
   "types": "lib/index.d.ts",

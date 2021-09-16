@@ -64,7 +64,7 @@ const hmyClient = {
     linkManager: '0xc0c7b147910ef11f6454dc1918ecde9a2b64a3a8',
     erc20Manager: '0x2fbbcef71544c461edfc311f42e3583d5f9675d1',
     erc721Manager: '0x39ec213272dda1f46424726bb20d82c3861568c0',
-    depositManager: '0xce3110e4ab757672b0535a9c1410fed80647b693',
+    depositManager: '0x8139d578f11638c78e16685eb2804c2a34482e41',
 
     hrc20Manager: '0x38092d17d3641b6fa49668775948af71b430765e',
     hrc20BSCManager: '0x38092d17d3641b6fa49668775948af71b430765e',
