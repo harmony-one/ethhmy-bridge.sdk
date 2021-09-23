@@ -31,8 +31,9 @@ export const oneToEthErc20 = async (
       getHRC20Action = getActionByType(operation, ACTION_TYPE.getHRC20Address);
     }
 
-    erc20TokenDetails = await ethMethods.tokenDetails(operationParams.erc20Address);
     hrc20Address = await hmyMethods.getMappingFor(operationParams.erc20Address);
+
+    erc20TokenDetails = await hmyMethods.tokenDetails(hrc20Address);
   } else {
     erc20TokenDetails = { decimals: 18 };
     hrc20Address = operationParams.hrc20Address;

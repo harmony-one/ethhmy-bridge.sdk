@@ -137,7 +137,9 @@ export const operation = async (
           api,
           operation,
           web3Client.ethMethodsERC20,
-          hmyClient.hmyMethodsERC20,
+          operation.network === NETWORK_TYPE.BINANCE
+            ? hmyClient.hmyMethodsERC20BSC
+            : hmyClient.hmyMethodsERC20,
           prefix,
           maxWaitingTime
         );
@@ -213,7 +215,9 @@ export const operation = async (
           api,
           operation,
           web3Client.ethMethodsERC20,
-          hmyClient.hmyMethodsERC20,
+          operation.network === NETWORK_TYPE.BINANCE
+            ? hmyClient.hmyMethodsERC20BSC
+            : hmyClient.hmyMethodsERC20,
           prefix,
           maxWaitingTime
         );

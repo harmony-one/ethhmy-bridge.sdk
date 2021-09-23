@@ -66,6 +66,9 @@ const hmyClient = {
 
     hrc20Manager: '0x9dd9b932e55702a6f50c676d817af04aa91a43af',
     hrc20BSCManager: '0x87e91c87196de58f6dc413d81c699da8ef39e4b9',
+
+    erc20BSCManager: '0x87e91c87196de58f6dc413d81c699da8ef39e4b9',
+    bscTokenManager: '0xafb75b85575f2afef713344e989bcc6f82af9aea',
   },
 };
 

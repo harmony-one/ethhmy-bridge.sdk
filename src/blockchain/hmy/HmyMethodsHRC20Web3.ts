@@ -138,7 +138,7 @@ export class HmyMethodsHRC20Web3 {
     return {
       name,
       symbol,
-      decimals: Number('0x' + decimals).toString(),
+      decimals: Number(decimals).toString(),
       erc20Address,
     };
   };

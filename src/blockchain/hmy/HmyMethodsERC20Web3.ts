@@ -169,4 +169,19 @@ export class HmyMethodsERC20Web3 {
 
     return response;
   };
+
+  tokenDetails = async (hrc20Address: string) => {
+    const erc20Contract = new this.hmy.eth.Contract(MyERC20Abi, hrc20Address);
+
+    const name = await erc20Contract.methods.name().call();
+    const symbol = await erc20Contract.methods.symbol().call();
+    const decimals = await erc20Contract.methods.decimals().call();
+
+    return {
+      name,
+      symbol,
+      decimals,
+      hrc20Address,
+    };
+  };
 }
