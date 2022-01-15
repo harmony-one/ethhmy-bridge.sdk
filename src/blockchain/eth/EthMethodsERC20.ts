@@ -20,9 +20,9 @@ export class EthMethodsERC20 {
   private ethManagerAddress: string;
   private useMetamask = false;
 
-  gasPrice: number;
-  gasLimit: number;
-  gasApiKey: string;
+  private gasPrice: number;
+  private gasLimit: number;
+  private gasApiKey: string;
 
   constructor(params: IEthMethodsInitParams) {
     this.web3 = params.web3;
@@ -74,7 +74,6 @@ export class EthMethodsERC20 {
     }
 
     const hmyAddrHex = getAddress(userAddr).checksum;
-
     const transaction = await this.ethManagerContract.methods
       .lockToken(erc20Address, withDecimals(amount, decimals), hmyAddrHex)
       .send({
