@@ -3,7 +3,6 @@ import { getAddress } from '@harmony-js/crypto';
 import Web3 from 'web3';
 
 import { mulDecimals } from '../../utils';
-import { getGasPrice } from './helpers';
 import MyERC1155Abi from '../out/MyERC1155';
 
 const BN = require('bn.js');
@@ -88,9 +87,9 @@ export class EthMethodsERC1155 {
     return await erc1155Contract.methods
       .setApprovalForAll(this.ethManagerAddress, true)
       .send({
-        from: accounts[0],
-        gas: process.env.ETH_GAS_LIMIT,
-        gasPrice: await getGasPrice(this.web3),
+        from: this.useMetamask ? accounts[0] : this.web3.eth.defaultAccount,
+        gas: this.gasLimit,
+        gasPrice: new BN(await this.web3.eth.getGasPrice()).mul(new BN(1)),
       })
       .on('transactionHash', (hash: string) => sendTxCallback(hash));
   };
@@ -118,7 +117,7 @@ export class EthMethodsERC1155 {
       })
       .on('transactionHash', (hash: string) => sendTxCallback(hash));
 
-    return transaction.events.Locked;
+    return transaction;
   };
 
   lockToken = async (
@@ -144,7 +143,7 @@ export class EthMethodsERC1155 {
       })
       .on('transactionHash', (hash: string) => sendTxCallback(hash));
 
-    return transaction.events.Locked;
+    return transaction;
   };
 
   checkEthBalance = async (erc1155Address: string, addr: string) => {

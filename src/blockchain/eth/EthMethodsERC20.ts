@@ -20,9 +20,9 @@ export class EthMethodsERC20 {
   private ethManagerAddress: string;
   private useMetamask = false;
 
-  private gasPrice: number;
-  private gasLimit: number;
-  private gasApiKey: string;
+  gasPrice: number;
+  gasLimit: number;
+  gasApiKey: string;
 
   constructor(params: IEthMethodsInitParams) {
     this.web3 = params.web3;

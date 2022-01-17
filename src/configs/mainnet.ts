@@ -29,6 +29,13 @@ const binanceClient: TConfig = {
     link: '0xFEFB4061d5c4F096D29e6ac8e300314b5F00199c',
     linkManager: '0x9EDC8d0Bde1Fc666831Bda1ded5B34A45f9E886C',
     erc721Manager: '0x426A61A2127fDD1318Ec0EdCe02474f382FdAd30',
+
+    hrc721Manager: '',
+    hrc721TokenManager: '',
+    hrc1155Manager: '',
+    hrc1155TokenManager: '',
+    erc1155Manager: '',
+    erc1155TokenManager: '',
   },
   gasPrice: 12000000000,
   gasLimit: 1000000,
@@ -49,6 +56,15 @@ const ethClient: TConfig = {
     tokenManager: '0x1Bd0029385F95AD2584cDFaf5C19F3F20651dEf6',
     ethManager: '0xF9Fb1c508Ff49F78b60d3A96dea99Fa5d7F3A8A6',
     nativeTokenHRC20: '0x6983D1E6DEf3690C4d616b13597A09e6193EA013',
+
+    hrc721Manager: '0x117BB501D7e34408d32e152D78ffFbd7FD1aeee5',
+    hrc721TokenManager: '0xF837fe0Eba85bE14446E546115ef20891E357D2B',
+
+    hrc1155Manager: '0x001Ca6D312843A593251DB4a536Cb408DeD441c5',
+    hrc1155TokenManager: '0x487e930e9d296CDDf1D3d51620b3aF0221013DD6',
+
+    erc1155Manager: '0x478279c5A0beb8401De1b4EaCB4863a243a8e3A3',
+    erc1155TokenManager: '0x94da065b27f4a61d6595c2ebb541bb7bd11b6266',
   },
   gasPrice: 100000000000,
   gasLimit: 150000,
@@ -71,6 +87,11 @@ const hmyClient = {
 
     erc20BSCManager: '0x0de8e70e94f4761dc5baf5833d0f13eb9fd93620',
     bscTokenManager: '0x7678a9532bfc62e1f65f819b72ade0a395deaabf',
+
+    HMY_HRC1155_MANAGER_CONTRACT: '0x4f9b3defb4f61227a7574f2a7adfe2841e1ae20e',
+    HMY_ERC1155_MANAGER_CONTRACT: '0xaf205b305a8ddb31f3c3b78508893d1ad268e0ad',
+    HMY_ERC1155_MANAGER_TOKEN: '0x94da065b27f4a61d6595c2ebb541bb7bd11b6266',
+    HMY_HRC721_MANAGER_CONTRACT: '0xbaf4d51738a42b976c3558b5f983cf4721451499',
   },
 };
 

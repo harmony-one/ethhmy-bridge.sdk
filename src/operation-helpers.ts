@@ -95,6 +95,10 @@ export const getEthBalance = async (
 
       return balance;
 
+    case TOKEN.ERC1155:
+      // TODO
+      return 9999999999999;
+
     case TOKEN.ONE:
       const erc20Address = await web3Client.ethMethodsHRC20.getMappingFor(
         '0x00eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
@@ -145,6 +149,10 @@ export const getOneBalance = async (
     case TOKEN.ERC721:
       res = await hmyClient.hmyMethodsLINK.checkHmyBalance(address);
       return divDecimals(res, 18);
+    case TOKEN.ERC1155:
+      // TODO
+      return divDecimals(999999999999, 18);
+
     case TOKEN.ERC20:
       const hrc20Address = await hmyClient.hmyMethodsERC20.getMappingFor(erc20);
 
