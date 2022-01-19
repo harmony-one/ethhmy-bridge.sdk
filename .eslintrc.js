@@ -11,12 +11,8 @@ module.exports = {
     sourceType: 'module', // Allows for the use of imports
   },
   rules: {
-    '@typescript-eslint/interface-name-prefix': [
-      'error',
-      {
-        prefixWithI: 'always',
-      },
-    ],
+    // @typescript-eslint/interface-name-prefix rule already been delete.
+    // see here: https://github.com/typescript-eslint/typescript-eslint/blob/master/packages/eslint-plugin/docs/rules/naming-convention.md#enforce-that-interface-names-do-not-begin-with-an-i
     'import/order': [
       'warn',
       {
@@ -24,11 +20,15 @@ module.exports = {
         'newlines-between': 'always',
       },
     ],
-    '@typescript-eslint/no-explicit-any': 2,
+    '@typescript-eslint/no-var-requires': 0,
+    '@typescript-eslint/ban-ts-comment': 0,
+    '@typescript-eslint/no-explicit-any': 0,
     '@typescript-eslint/explicit-member-accessibility': [1, { accessibility: 'no-public' }],
     '@typescript-eslint/explicit-function-return-type': 0,
-    '@typescript-eslint/member-ordering': 2,
+    '@typescript-eslint/member-ordering': 0,
+    '@typescript-eslint/explicit-module-boundary-types': 0,
     'no-debugger': 2,
     'no-console': 1,
+    'prettier/prettier': 0,
   },
 };

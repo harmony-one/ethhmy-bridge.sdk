@@ -74,7 +74,6 @@ export class EthMethodsERC20 {
     }
 
     const hmyAddrHex = getAddress(userAddr).checksum;
-
     const transaction = await this.ethManagerContract.methods
       .lockToken(erc20Address, withDecimals(amount, decimals), hmyAddrHex)
       .send({

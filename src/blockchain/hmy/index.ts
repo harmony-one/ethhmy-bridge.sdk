@@ -10,17 +10,21 @@ import hmyLINKAbi from '../out/MyERC20';
 import hmyLINKManagerAbi from '../out/LINKHmyManager';
 import hmyManagerAbi from '../out/HmyManagerERC20';
 import { abi as hmyManagerAbiHRC20 } from '../out/HmyManagerHRC20';
+import { abi as erc1155HmyManagerAbi } from '../out/ERC1155HmyManager';
 import hmyERC721ManagerAbi from '../out/HmyManagerERC721';
 import hmyDepositAbi from '../out/HmyDeposit';
 import { HmyMethodsDepositWeb3 } from './HmyMethodsDepositWeb3';
 import { HmyMethodsDeposit } from './HmyMethodsDeposit';
 import { HmyMethodsHRC20 } from './HmyMethodsHRC20';
 import { HmyMethodsHRC20Web3 } from './HmyMethodsHRC20Web3';
+import { HmyMethodsERC1155 } from './HmyMethodsERC1155';
+import { HmyMethodsERC1155Web3 } from './HmyMethodsERC1155Web3';
 
 export type HmyMethodsCommon = HmyMethods | HmyMethodsWeb3;
 export type HmyMethodsDepositCommon = HmyMethodsDeposit | HmyMethodsDepositWeb3;
 export type HmyMethodsErc20Common = HmyMethodsERC20 | HmyMethodsERC20Web3;
 export type HmyMethodsHrc20Common = HmyMethodsHRC20 | HmyMethodsHRC20Web3;
+export type HmyMethodsERC1155Common = HmyMethodsERC1155 | HmyMethodsERC1155Web3;
 
 export interface IHmyClient {
   hmyMethodsBUSD: HmyMethodsCommon;
@@ -31,6 +35,7 @@ export interface IHmyClient {
   hmyMethodsHRC20: HmyMethodsHrc20Common;
   hmyMethodsHRC20BSC: HmyMethodsHrc20Common;
   hmyMethodsERC721: HmyMethodsErc20Common;
+  hmyMethodsERC1155: HmyMethodsERC1155Common;
   getHmyBalance: (addr: string) => Promise<string>;
   getBech32Address: (addr: string) => string;
   addWallet: (pk: string) => void;
@@ -55,6 +60,10 @@ export interface IHmyClientParams {
     hrc20BSCManager: string;
     erc20BSCManager: string;
     bscTokenManager: string;
+    HMY_HRC1155_MANAGER_CONTRACT: string;
+    HMY_ERC1155_MANAGER_CONTRACT: string;
+    HMY_ERC1155_MANAGER_TOKEN: string;
+    HMY_HRC721_MANAGER_CONTRACT: string;
   };
   gasLimit?: number;
   gasPrice?: number;
@@ -86,6 +95,7 @@ export const getHmyClient = async (params: IHmyClientParams): Promise<IHmyClient
     hmyMethodsHRC20: HmyMethodsHrc20Common,
     hmyMethodsHRC20BSC: HmyMethodsHrc20Common,
     hmyMethodsERC721: HmyMethodsErc20Common,
+    hmyMethodsERC1155: HmyMethodsERC1155Common,
     hmyMethodsDeposit: HmyMethodsDepositCommon;
 
   // @ts-ignore
@@ -120,6 +130,11 @@ export const getHmyClient = async (params: IHmyClientParams): Promise<IHmyClient
     const hmyManagerContractHRC20BSC = new web3.eth.Contract(
       hmyManagerAbiHRC20,
       contracts.hrc20BSCManager
+    );
+
+    const hmyManagerContractERC1155 = new web3.eth.Contract(
+      erc1155HmyManagerAbi,
+      contracts.HMY_ERC1155_MANAGER_CONTRACT
     );
 
     const hmyDepositContract = new web3.eth.Contract(hmyDepositAbi, contracts.depositManager);
@@ -168,6 +183,14 @@ export const getHmyClient = async (params: IHmyClientParams): Promise<IHmyClient
       hmyManagerContract: hmyManagerContractHRC20BSC,
       hmyManagerContractAddress: contracts.hrc20BSCManager,
     });
+
+    hmyMethodsERC1155 = new HmyMethodsERC1155Web3({
+      web3,
+      hmyManagerContract: hmyManagerContractERC1155,
+      hmyManagerContractAddress: contracts.HMY_ERC1155_MANAGER_CONTRACT,
+      hmyTokenManagerAddress: contracts.HMY_ERC1155_MANAGER_TOKEN,
+      options: { gasPrice: 30000000000, gasLimit: 6721900 },
+    });
   } else {
     const hmyDepositContract = hmy.contracts.createContract(
       hmyDepositAbi,
@@ -208,6 +231,11 @@ export const getHmyClient = async (params: IHmyClientParams): Promise<IHmyClient
     const hmyManagerERC721Contract = hmy.contracts.createContract(
       hmyERC721ManagerAbi,
       contracts.erc721Manager
+    );
+
+    const hmyManagerERC1155Contract = hmy.contracts.createContract(
+      erc1155HmyManagerAbi,
+      contracts.HMY_ERC1155_MANAGER_CONTRACT
     );
 
     hmyMethodsBUSD = new HmyMethods({
@@ -252,6 +280,12 @@ export const getHmyClient = async (params: IHmyClientParams): Promise<IHmyClient
       hmy: hmy,
       hmyManagerContract: hmyManagerERC721Contract,
     });
+
+    hmyMethodsERC1155 = new HmyMethodsERC1155({
+      hmy: hmy,
+      hmyManagerContract: hmyManagerERC1155Contract,
+      hmyTokenManagerAddress: contracts.HMY_ERC1155_MANAGER_TOKEN,
+    });
   }
 
   return {
@@ -273,6 +307,7 @@ export const getHmyClient = async (params: IHmyClientParams): Promise<IHmyClient
     hmyMethodsERC20,
     hmyMethodsERC20BSC,
     hmyMethodsERC721,
+    hmyMethodsERC1155,
     hmyMethodsDeposit,
     hmyMethodsHRC20,
     hmyMethodsHRC20BSC,
@@ -285,7 +320,8 @@ export const getHmyClient = async (params: IHmyClientParams): Promise<IHmyClient
         hmyMethodsERC20.setUseMetamask(value);
         hmyMethodsERC20BSC.setUseMetamask(value);
         hmyMethodsHRC20.setUseMetamask(value);
-        // hmyMethodsERC721.setUseMetamask(value);
+        hmyMethodsERC721.setUseMetamask(value);
+        hmyMethodsERC1155.setUseMetamask(value);
         hmyMethodsDeposit.setUseMetamask(value);
         hmyMethodsHRC20BSC.setUseMetamask(value);
       } else {
@@ -295,6 +331,7 @@ export const getHmyClient = async (params: IHmyClientParams): Promise<IHmyClient
         hmyMethodsERC20BSC.setUseOneWallet(value);
         hmyMethodsHRC20.setUseOneWallet(value);
         hmyMethodsERC721.setUseOneWallet(value);
+        hmyMethodsERC1155.setUseOneWallet(value);
         hmyMethodsDeposit.setUseOneWallet(value);
         hmyMethodsHRC20BSC.setUseOneWallet(value);
       }
@@ -306,7 +343,8 @@ export const getHmyClient = async (params: IHmyClientParams): Promise<IHmyClient
         hmyMethodsERC20.setUseMetamask(value);
         hmyMethodsERC20BSC.setUseMetamask(value);
         hmyMethodsHRC20.setUseMetamask(value);
-        // hmyMethodsERC721.setUseMetamask(value);
+        hmyMethodsERC721.setUseMetamask(value);
+        hmyMethodsERC1155.setUseMetamask(value);
         hmyMethodsDeposit.setUseMetamask(value);
         hmyMethodsHRC20BSC.setUseMetamask(value);
       } else {
@@ -316,6 +354,7 @@ export const getHmyClient = async (params: IHmyClientParams): Promise<IHmyClient
         hmyMethodsERC20BSC.setUseMathWallet(value);
         hmyMethodsHRC20.setUseMathWallet(value);
         hmyMethodsERC721.setUseMathWallet(value);
+        hmyMethodsERC1155.setUseMathWallet(value);
         hmyMethodsDeposit.setUseMathWallet(value);
         hmyMethodsHRC20BSC.setUseMathWallet(value);
       }

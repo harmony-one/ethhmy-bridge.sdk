@@ -9,6 +9,8 @@ import {
   ethToOne,
   ethToOneErc20,
   ethToOneErc721,
+  ethToOneErc1155,
+  oneToEthErc1155,
   ethToOneETH,
   ethToOneHRC20,
   ethToOneONE,
@@ -36,6 +38,11 @@ export const operation = async (
     hrc20Address?: string;
     maxWaitingTime: number;
     network: NETWORK_TYPE;
+    erc1155Address?: string;
+    hrc721Address?: string;
+    hrc1155Address?: string;
+    hrc1155TokenId?: any;
+    erc1155TokenId?: any;
   },
   callback: (id: string) => void
 ) => {
@@ -51,6 +58,11 @@ export const operation = async (
     erc20Address,
     hrc20Address,
     maxWaitingTime,
+    erc1155Address,
+    hrc721Address,
+    hrc1155Address,
+    hrc1155TokenId,
+    erc1155TokenId,
   } = params;
 
   const prefix = `[${token.toUpperCase()}: ${type.toUpperCase()}]`;
@@ -82,6 +94,11 @@ export const operation = async (
       erc20Address,
       hrc20Address,
       network: params.network,
+      erc1155Address,
+      hrc721Address,
+      hrc1155Address,
+      hrc1155TokenId,
+      erc1155TokenId,
     };
 
     // logger.info({ prefix, message: 'ONE balance before: ' + oneBalanceBefore });
@@ -242,6 +259,30 @@ export const operation = async (
           operation,
           web3Client.ethMethodsERС721,
           hmyClient.hmyMethodsERC721,
+          prefix,
+          maxWaitingTime
+        );
+      }
+    }
+
+    if (token === TOKEN.ERC1155) {
+      if (type === EXCHANGE_MODE.ETH_TO_ONE) {
+        res = await ethToOneErc1155(
+          api,
+          operation,
+          web3Client.ethMethodsERC1155,
+          hmyClient.hmyMethodsERC20,
+          prefix,
+          maxWaitingTime
+        );
+      }
+
+      if (type === EXCHANGE_MODE.ONE_TO_ETH) {
+        res = await oneToEthErc1155(
+          api,
+          operation,
+          web3Client.ethMethodsERC1155,
+          hmyClient.hmyMethodsERC1155,
           prefix,
           maxWaitingTime
         );

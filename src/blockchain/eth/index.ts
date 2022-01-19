@@ -6,9 +6,11 @@ import ethLINKAbi from '../out/MyERC20';
 import ethLINKManagerAbi from '../out/LINKEthManager';
 import ethManagerAbi from '../out/EthManagerERC20';
 import { abi as ethManagerAbiHRC20 } from '../out/EthManagerHRC20';
+import { abi as ethERC1155ManagerAbi } from '../out/ERC1155EthManager';
 import ethERC721ManagerAbi from '../out/EthManagerERC721';
 import { EthMethodsHRC20 } from './EthMethodsHRC20';
 import { EthMethodsNative } from './EthMethodsNative';
+import { EthMethodsERC1155 } from './EthMethodsERC1155';
 
 export interface IWeb3Client {
   web3: typeof Web3;
@@ -19,6 +21,7 @@ export interface IWeb3Client {
   ethMethodsNative: EthMethodsNative;
   ethMethodsHRC20: EthMethodsHRC20;
   ethMethodsERС721: EthMethodsERC20;
+  ethMethodsERC1155: EthMethodsERC1155;
   getUserAddress: () => string;
   addWallet: (pk: string) => void;
   setUseMetamask: (value: boolean) => void;
@@ -33,6 +36,7 @@ export interface IWeb3ClientParams {
     linkManager: string;
     erc20Manager: string;
     erc721Manager: string;
+    erc1155Manager: string;
 
     multisigWallet: string;
     hrc20Manager: string;
@@ -132,6 +136,11 @@ export const getWeb3Client = (params: IWeb3ClientParams): IWeb3Client => {
     contracts.erc721Manager
   );
 
+  const ethManagerContractERC1155 = new web3.eth.Contract(
+    ethERC1155ManagerAbi,
+    contracts.erc1155Manager
+  );
+
   const ethMethodsERС721 = new EthMethodsERC20({
     web3: web3,
     ethManagerContract: ethManagerContractERC721,
@@ -139,6 +148,14 @@ export const getWeb3Client = (params: IWeb3ClientParams): IWeb3Client => {
     gasPrice,
     gasLimit,
     gasApiKey,
+  });
+
+  const ethMethodsERC1155 = new EthMethodsERC1155({
+    web3: web3,
+    ethManagerContract: ethManagerContractERC1155,
+    ethManagerAddress: contracts.erc1155Manager,
+    gasPrice,
+    gasLimit,
   });
 
   const getEthBalance = (ethAddress: string): Promise<string> => {
@@ -168,6 +185,7 @@ export const getWeb3Client = (params: IWeb3ClientParams): IWeb3Client => {
     ethMethodsERC20,
     ethMethodsHRC20,
     ethMethodsERС721,
+    ethMethodsERC1155,
     getUserAddress: () => ethUserAccount && ethUserAccount.address,
     setUseMetamask: (value: boolean) => {
       ethMethodsBUSD.setUseMetamask(value);
@@ -175,6 +193,7 @@ export const getWeb3Client = (params: IWeb3ClientParams): IWeb3Client => {
       ethMethodsERC20.setUseMetamask(value);
       ethMethodsNative.setUseMetamask(value);
       ethMethodsERС721.setUseMetamask(value);
+      ethMethodsERC1155.setUseMetamask(value);
       ethMethodsHRC20.setUseMetamask(value);
     },
   };

@@ -72,6 +72,11 @@ export class BridgeSDK {
       erc20Address?: string;
       hrc20Address?: string;
       maxWaitingTime?: number;
+      erc1155Address?: string;
+      hrc721Address?: string;
+      hrc1155Address?: string;
+      hrc1155TokenId?: any;
+      erc1155TokenId?: any;
     },
     callback?: (id: string) => void
   ) => {
