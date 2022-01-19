@@ -101,8 +101,6 @@ export class ValidatorsAPI {
   createOperation = async (params: ICreateOperationParams): Promise<IOperation> => {
     const id = uuid();
 
-    console.log(111111, params)
-
     return this.callAction(async url => {
       const res = await agent.post<{ body: IOperation }>(url + '/operations', { id, ...params });
 
