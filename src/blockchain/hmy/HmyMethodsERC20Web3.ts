@@ -16,7 +16,7 @@ export class HmyMethodsERC20Web3 {
   private hmy: Web3;
   private hmyManagerContract: Contract;
   private hmyManagerContractAddress: string;
-  // private options = { gasPrice: 1000000000, gasLimit: 6721900 };
+  // private options = { gasPrice: 30000000000, gasLimit: 6721900 };
   private useMetamask = false;
 
   constructor(params: IHmyMethodsInitParams) {

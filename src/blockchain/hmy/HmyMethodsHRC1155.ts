@@ -13,7 +13,7 @@ interface IHmyMethodsInitParams {
 export class HmyMethodsHRC1155 {
   private hmy: Harmony;
   private hmyManagerContract: Contract;
-  private options = { gasPrice: 1000000000, gasLimit: 6721900 };
+  private options = { gasPrice: 30000000000, gasLimit: 6721900 };
 
   private useOneWallet = false;
   private useMathWallet = false;

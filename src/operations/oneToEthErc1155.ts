@@ -2,7 +2,7 @@ import { ACTION_TYPE, IOperation, STATUS } from '../interfaces';
 import { logger } from '../utils/logs';
 import { checkStatus, confirmCallback, getActionByType, waitAction } from '../operation-helpers';
 import { sleep } from '../utils';
-import { HmyMethodsERC1155 } from '../blockchain/hmy/HmyMethodsERC1155';
+import { HmyMethodsERC1155Common } from '../blockchain/hmy';
 import { ValidatorsAPI } from '../api';
 import { EthMethodsERC1155 } from '../blockchain/eth/EthMethodsERC1155';
 
@@ -10,7 +10,7 @@ export const oneToEthErc1155 = async (
   api: ValidatorsAPI,
   operationParams: IOperation,
   ethMethods: EthMethodsERC1155,
-  hmyMethods: HmyMethodsERC1155,
+  hmyMethods: HmyMethodsERC1155Common,
   prefix: string,
   maxWaitingTime: number
 ) => {
@@ -57,8 +57,8 @@ export const oneToEthErc1155 = async (
     const res: any = await hmyMethods.burnTokens(
       hrc1155Address,
       operationParams.ethAddress,
-      operationParams.erc1155TokenId,
-      operationParams.amount,
+      [...operationParams.erc1155TokenId],
+      [...operationParams.amount],
       (hash: string) => confirmCallback(api, hash, burnToken.type, operationParams.id)
     );
 

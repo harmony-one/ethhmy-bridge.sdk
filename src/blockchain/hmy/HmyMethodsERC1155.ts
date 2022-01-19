@@ -7,16 +7,16 @@ import { mulDecimals } from '../../utils';
 
 interface IHmyMethodsInitParams {
   hmy: Harmony;
-  hmyManagerContract: Contract;
+  hmyManagerContract: any;
   hmyTokenManagerAddress: string;
   options?: { gasPrice: number; gasLimit: number };
 }
 
 export class HmyMethodsERC1155 {
-  private hmy: Harmony;
+  private hmy?: Harmony;
   private hmyManagerContract: Contract;
   private hmyTokenManagerAddress: string;
-  private options = { gasPrice: 3000000000, gasLimit: 6721900 };
+  private options = { gasPrice: 30000000000, gasLimit: 6721900 };
 
   private useOneWallet = false;
   private useMathWallet = false;

@@ -14,7 +14,7 @@ export class HmyMethods {
   public hmy: Harmony;
   public hmyTokenContract: Contract;
   public hmyManagerContract: Contract;
-  public options = { gasPrice: 1000000000, gasLimit: 6721900 };
+  public options = { gasPrice: 30000000000, gasLimit: 6721900 };
   public useOneWallet = false;
   public useMathWallet = false;
 

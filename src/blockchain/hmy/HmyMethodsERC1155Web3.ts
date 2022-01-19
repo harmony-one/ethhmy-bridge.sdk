@@ -16,7 +16,7 @@ interface IHmyMethodsInitParams {
 
 export class HmyMethodsERC1155Web3 {
   web3: Web3;
-  private hmyManagerContract: Contract;
+  private hmyManagerContract: any;
   hmyManagerContractAddress: string;
   private hmyTokenManagerAddress: string;
   private useMetamask = false;
@@ -231,5 +231,23 @@ export class HmyMethodsERC1155Web3 {
         value: mulDecimals(amount, 18),
       })
       .on('transactionHash', sendTxCallback);
+  };
+
+  tokenDetails = async (hrc20Address: string) => {
+    const hmyAddrHex = getAddress(hrc20Address).checksum;
+
+    const erc1155Contract = new this.web3.eth.Contract(MyERC1155Abi, hmyAddrHex);
+
+    const symbol = await erc1155Contract.methods.symbol().call();
+
+    let name = symbol;
+
+    try {
+      name = await erc1155Contract.methods.name().call();
+    } catch (e) {}
+
+    const decimals = await erc1155Contract.methods.decimals().call();
+
+    return { name, symbol, decimals, hrc20Address };
   };
 }

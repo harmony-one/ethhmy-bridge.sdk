@@ -18,11 +18,13 @@ import { HmyMethodsDeposit } from './HmyMethodsDeposit';
 import { HmyMethodsHRC20 } from './HmyMethodsHRC20';
 import { HmyMethodsHRC20Web3 } from './HmyMethodsHRC20Web3';
 import { HmyMethodsERC1155 } from './HmyMethodsERC1155';
+import { HmyMethodsERC1155Web3 } from './HmyMethodsERC1155Web3';
 
 export type HmyMethodsCommon = HmyMethods | HmyMethodsWeb3;
 export type HmyMethodsDepositCommon = HmyMethodsDeposit | HmyMethodsDepositWeb3;
 export type HmyMethodsErc20Common = HmyMethodsERC20 | HmyMethodsERC20Web3;
 export type HmyMethodsHrc20Common = HmyMethodsHRC20 | HmyMethodsHRC20Web3;
+export type HmyMethodsERC1155Common = HmyMethodsERC1155 | HmyMethodsERC1155Web3;
 
 export interface IHmyClient {
   hmyMethodsBUSD: HmyMethodsCommon;
@@ -33,7 +35,7 @@ export interface IHmyClient {
   hmyMethodsHRC20: HmyMethodsHrc20Common;
   hmyMethodsHRC20BSC: HmyMethodsHrc20Common;
   hmyMethodsERC721: HmyMethodsErc20Common;
-  hmyMethodsERC1155: HmyMethodsERC1155;
+  hmyMethodsERC1155: HmyMethodsERC1155Common;
   getHmyBalance: (addr: string) => Promise<string>;
   getBech32Address: (addr: string) => string;
   addWallet: (pk: string) => void;
@@ -93,7 +95,7 @@ export const getHmyClient = async (params: IHmyClientParams): Promise<IHmyClient
     hmyMethodsHRC20: HmyMethodsHrc20Common,
     hmyMethodsHRC20BSC: HmyMethodsHrc20Common,
     hmyMethodsERC721: HmyMethodsErc20Common,
-    hmyMethodsERC1155: HmyMethodsERC1155,
+    hmyMethodsERC1155: HmyMethodsERC1155Common,
     hmyMethodsDeposit: HmyMethodsDepositCommon;
 
   // @ts-ignore
@@ -128,6 +130,11 @@ export const getHmyClient = async (params: IHmyClientParams): Promise<IHmyClient
     const hmyManagerContractHRC20BSC = new web3.eth.Contract(
       hmyManagerAbiHRC20,
       contracts.hrc20BSCManager
+    );
+
+    const hmyManagerContractERC1155 = new web3.eth.Contract(
+      erc1155HmyManagerAbi,
+      contracts.HMY_ERC1155_MANAGER_CONTRACT
     );
 
     const hmyDepositContract = new web3.eth.Contract(hmyDepositAbi, contracts.depositManager);
@@ -175,6 +182,14 @@ export const getHmyClient = async (params: IHmyClientParams): Promise<IHmyClient
       hmy: web3,
       hmyManagerContract: hmyManagerContractHRC20BSC,
       hmyManagerContractAddress: contracts.hrc20BSCManager,
+    });
+
+    hmyMethodsERC1155 = new HmyMethodsERC1155Web3({
+      web3,
+      hmyManagerContract: hmyManagerContractERC1155,
+      hmyManagerContractAddress: contracts.HMY_ERC1155_MANAGER_CONTRACT,
+      hmyTokenManagerAddress: contracts.HMY_ERC1155_MANAGER_TOKEN,
+      options: { gasPrice: 30000000000, gasLimit: 6721900 },
     });
   } else {
     const hmyDepositContract = hmy.contracts.createContract(

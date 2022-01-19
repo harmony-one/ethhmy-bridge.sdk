@@ -17,7 +17,7 @@ export class HmyMethodsWeb3 {
   public hmyTokenContract: Contract;
   public hmyManagerContract: Contract;
   public hmyManagerContractAddress: string;
-  // private options = { gasPrice: 1000000000, gasLimit: 6721900 };
+  // private options = { gasPrice: 30000000000, gasLimit: 6721900 };
   public useMetamask = false;
 
   constructor(params: IHmyMethodsInitParams) {
