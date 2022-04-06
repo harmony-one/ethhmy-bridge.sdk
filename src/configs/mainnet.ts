@@ -3,8 +3,8 @@ import { TConfig } from './index';
 const api = {
   validators: [
     'https://be1.bridge.hmny.io',
-    'https://marsinitiative.one',
     'https://harmony.kratosvalidator.com',
+    'https://be3.bridge.hmny.io',
   ],
   threshold: 2, // minimum validators number to do operation
   assetServiceUrl: 'https://be4.bridge.hmny.io', // assets statistic service
